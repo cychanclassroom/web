@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物理 Chapter 4 MC 1–52題｜完整版</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
+body{background:#f5f7fa;padding:20px}
+.title{text-align:center;font-size:26px;margin-bottom:20px;color:#222}
+.page-nav{text-align:center;margin-bottom:24px}
+.page-btn{padding:10px 16px;margin:0 4px;border:none;border-radius:6px;background:#cce7ff;cursor:pointer}
+.page-btn.active{background:#66b3ff;color:#fff}
+.question-item{background:white;border-radius:12px;padding:22px;margin:0 auto 22px auto;max-width:920px;border:1px solid #ddd;display:none}
+.question-item.show{display:block}
+.q-number{font-size:20px;font-weight:bold;margin-bottom:10px;color:#004488}
+.question-item img{max-width:100%;height:auto;border-radius:8px;margin-bottom:18px}
+.ans-btns{display:flex;gap:12px;margin-bottom:14px}
+.ans-btns button{flex:1;padding:14px;font-size:16px;border:none;border-radius:8px;background:#cce7ff;color:#004488;cursor:pointer}
+.ans-btns button:hover{background:#b3d9ff}
+.result{padding:16px;border-radius:8px;font-size:18px;line-height:1.6;display:none;white-space:pre-wrap}
+.correct{background:#d1e7dd;color:#0a5633;border:1px solid #badbcc}
+.wrong{background:#f8d7da;color:#842029;border:1px solid #f5c2c7}
+</style>
+</head>
+<body>
+<div class="title">Book 1 第4課 物理物態變化 選擇題 1–52題<br>獨立按鈕｜官方詳解</div>
+<div class="page-nav">
+<button class="page-btn active" onclick="showPage(1)">1–10</button>
+<button class="page-btn" onclick="showPage(2)">11–20</button>
+<button class="page-btn" onclick="showPage(3)">21–30</button>
+<button class="page-btn" onclick="showPage(4)">31–40</button>
+<button class="page-btn" onclick="showPage(5)">41–50</button>
+<button class="page-btn" onclick="showPage(6)">51–52</button>
+</div>
+
+<!-- 第1頁 1–10題 -->
+<div class="question-item show" data-page="1">
+<div class="q-number">Q1</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC001.png">
+<div class="ans-btns"><button onclick="check(1,'A')">A</button><button onclick="check(1,'B')">B</button><button onclick="check(1,'C')">C</button><button onclick="check(1,'D')">D</button></div>
+<div class="result" id="r1"></div>
+</div>
+
+<div class="question-item show" data-page="1">
+<div class="q-number">Q2</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC002.png">
+<div class="ans-btns"><button onclick="check(2,'A')">A</button><button onclick="check(2,'B')">B</button><button onclick="check(2,'C')">C</button><button onclick="check(2,'D')">D</button></div>
+<div class="result" id="r2"></div>
+</div>
+
+<div class="question-item show" data-page="1">
+<div class="q-number">Q3</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC003.png">
+<div class="ans-btns"><button onclick="check(3,'A')">A</button><button onclick="check(3,'B')">B</button><button onclick="check(3,'C')">C</button><button onclick="check(3,'D')">D</button></div>
+<div class="result" id="r3"></div>
+</div>
+
+<div class="question-item show" data-page="1">
+<div class="q-number">Q4</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC004.png">
+<div class="ans-btns"><button onclick="check(4,'A')">A</button><button onclick="check(4,'B')">B</button><button onclick="check(4,'C')">C</button><button onclick="check(4,'D')">D</button></div>
+<div class="result" id="r4"></div>
+</div>
+
+<div class="question-item show" data-page="1">
+<div class="q-number">Q5</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC005.png">
+<div class="ans-btns"><button onclick="check(5,'A')">A</button><button onclick="check(5,'B')">B</button><button onclick="check(5,'C')">C</button><button onclick="check(5,'D')">D</button></div>
+<div class="result" id="r5"></div>
+</div>
+
+<div class="question-item show" data-page="1">
+<div class="q-number">Q6</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC006.png">
+<div class="ans-btns"><button onclick="check(6,'A')">A</button><button onclick="check(6,'B')">B</button><button onclick="check(6,'C')">C</button><button onclick="check(6,'D')">D</button></div>
+<div class="result" id="r6"></div>
+</div>
+
+<div class="question-item show" data-page="1">
+<div class="q-number">Q7</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC007.png">
+<div class="ans-btns"><button onclick="check(7,'A')">A</button><button onclick="check(7,'B')">B</button><button onclick="check(7,'C')">C</button><button onclick="check(7,'D')">D</button></div>
+<div class="result" id="r7"></div>
+</div>
+
+<div class="question-item show" data-page="1">
+<div class="q-number">Q8</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC008.png">
+<div class="ans-btns"><button onclick="check(8,'A')">A</button><button onclick="check(8,'B')">B</button><button onclick="check(8,'C')">C</button><button onclick="check(8,'D')">D</button></div>
+<div class="result" id="r8"></div>
+</div>
+
+<div class="question-item show" data-page="1">
+<div class="q-number">Q9</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC009.png">
+<div class="ans-btns"><button onclick="check(9,'A')">A</button><button onclick="check(9,'B')">B</button><button onclick="check(9,'C')">C</button><button onclick="check(9,'D')">D</button></div>
+<div class="result" id="r9"></div>
+</div>
+
+<div class="question-item show" data-page="1">
+<div class="q-number">Q10</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC010.png">
+<div class="ans-btns"><button onclick="check(10,'A')">A</button><button onclick="check(10,'B')">B</button><button onclick="check(10,'C')">C</button><button onclick="check(10,'D')">D</button></div>
+<div class="result" id="r10"></div>
+</div>
+
+<!-- 第2頁 11–20題 -->
+<div class="question-item" data-page="2">
+<div class="q-number">Q11</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC011.png">
+<div class="ans-btns"><button onclick="check(11,'A')">A</button><button onclick="check(11,'B')">B</button><button onclick="check(11,'C')">C</button><button onclick="check(11,'D')">D</button></div>
+<div class="result" id="r11"></div>
+</div>
+
+<div class="question-item" data-page="2">
+<div class="q-number">Q12</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC012.png">
+<div class="ans-btns"><button onclick="check(12,'A')">A</button><button onclick="check(12,'B')">B</button><button onclick="check(12,'C')">C</button><button onclick="check(12,'D')">D</button></div>
+<div class="result" id="r12"></div>
+</div>
+
+<div class="question-item" data-page="2">
+<div class="q-number">Q13</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC013.png">
+<div class="ans-btns"><button onclick="check(13,'A')">A</button><button onclick="check(13,'B')">B</button><button onclick="check(13,'C')">C</button><button onclick="check(13,'D')">D</button></div>
+<div class="result" id="r13"></div>
+</div>
+
+<div class="question-item" data-page="2">
+<div class="q-number">Q14</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC014.png">
+<div class="ans-btns"><button onclick="check(14,'A')">A</button><button onclick="check(14,'B')">B</button><button onclick="check(14,'C')">C</button><button onclick="check(14,'D')">D</button></div>
+<div class="result" id="r14"></div>
+</div>
+
+<div class="question-item" data-page="2">
+<div class="q-number">Q15</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC015.png">
+<div class="ans-btns"><button onclick="check(15,'A')">A</button><button onclick="check(15,'B')">B</button><button onclick="check(15,'C')">C</button><button onclick="check(15,'D')">D</button></div>
+<div class="result" id="r15"></div>
+</div>
+
+<div class="question-item" data-page="2">
+<div class="q-number">Q16</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC016.png">
+<div class="ans-btns"><button onclick="check(16,'A')">A</button><button onclick="check(16,'B')">B</button><button onclick="check(16,'C')">C</button><button onclick="check(16,'D')">D</button></div>
+<div class="result" id="r16"></div>
+</div>
+
+<div class="question-item" data-page="2">
+<div class="q-number">Q17</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC017.png">
+<div class="ans-btns"><button onclick="check(17,'A')">A</button><button onclick="check(17,'B')">B</button><button onclick="check(17,'C')">C</button><button onclick="check(17,'D')">D</button></div>
+<div class="result" id="r17"></div>
+</div>
+
+<div class="question-item" data-page="2">
+<div class="q-number">Q18</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC018.png">
+<div class="ans-btns"><button onclick="check(18,'A')">A</button><button onclick="check(18,'B')">B</button><button onclick="check(18,'C')">C</button><button onclick="check(18,'D')">D</button></div>
+<div class="result" id="r18"></div>
+</div>
+
+<div class="question-item" data-page="2">
+<div class="q-number">Q19</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC019.png">
+<div class="ans-btns"><button onclick="check(19,'A')">A</button><button onclick="check(19,'B')">B</button><button onclick="check(19,'C')">C</button><button onclick="check(19,'D')">D</button></div>
+<div class="result" id="r19"></div>
+</div>
+
+<div class="question-item" data-page="2">
+<div class="q-number">Q20</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC020.png">
+<div class="ans-btns"><button onclick="check(20,'A')">A</button><button onclick="check(20,'B')">B</button><button onclick="check(20,'C')">C</button><button onclick="check(20,'D')">D</button></div>
+<div class="result" id="r20"></div>
+</div>
+
+<!-- 第3頁 21–30題 -->
+<div class="question-item" data-page="3">
+<div class="q-number">Q21</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC021.png">
+<div class="ans-btns"><button onclick="check(21,'A')">A</button><button onclick="check(21,'B')">B</button><button onclick="check(21,'C')">C</button><button onclick="check(21,'D')">D</button></div>
+<div class="result" id="r21"></div>
+</div>
+
+<div class="question-item" data-page="3">
+<div class="q-number">Q22</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC022.png">
+<div class="ans-btns"><button onclick="check(22,'A')">A</button><button onclick="check(22,'B')">B</button><button onclick="check(22,'C')">C</button><button onclick="check(22,'D')">D</button></div>
+<div class="result" id="r22"></div>
+</div>
+
+<div class="question-item" data-page="3">
+<div class="q-number">Q23</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC023.png">
+<div class="ans-btns"><button onclick="check(23,'A')">A</button><button onclick="check(23,'B')">B</button><button onclick="check(23,'C')">C</button><button onclick="check(23,'D')">D</button></div>
+<div class="result" id="r23"></div>
+</div>
+
+<div class="question-item" data-page="3">
+<div class="q-number">Q24</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC024.png">
+<div class="ans-btns"><button onclick="check(24,'A')">A</button><button onclick="check(24,'B')">B</button><button onclick="check(24,'C')">C</button><button onclick="check(24,'D')">D</button></div>
+<div class="result" id="r24"></div>
+</div>
+
+<div class="question-item" data-page="3">
+<div class="q-number">Q25</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC025.png">
+<div class="ans-btns"><button onclick="check(25,'A')">A</button><button onclick="check(25,'B')">B</button><button onclick="check(25,'C')">C</button><button onclick="check(25,'D')">D</button></div>
+<div class="result" id="r25"></div>
+</div>
+
+<div class="question-item" data-page="3">
+<div class="q-number">Q26</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC026.png">
+<div class="ans-btns"><button onclick="check(26,'A')">A</button><button onclick="check(26,'B')">B</button><button onclick="check(26,'C')">C</button><button onclick="check(26,'D')">D</button></div>
+<div class="result" id="r26"></div>
+</div>
+
+<div class="question-item" data-page="3">
+<div class="q-number">Q27</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC027.png">
+<div class="ans-btns"><button onclick="check(27,'A')">A</button><button onclick="check(27,'B')">B</button><button onclick="check(27,'C')">C</button><button onclick="check(27,'D')">D</button></div>
+<div class="result" id="r27"></div>
+</div>
+
+<div class="question-item" data-page="3">
+<div class="q-number">Q28</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC028.png">
+<div class="ans-btns"><button onclick="check(28,'A')">A</button><button onclick="check(28,'B')">B</button><button onclick="check(28,'C')">C</button><button onclick="check(28,'D')">D</button></div>
+<div class="result" id="r28"></div>
+</div>
+
+<div class="question-item" data-page="3">
+<div class="q-number">Q29</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC029.png">
+<div class="ans-btns"><button onclick="check(29,'A')">A</button><button onclick="check(29,'B')">B</button><button onclick="check(29,'C')">C</button><button onclick="check(29,'D')">D</button></div>
+<div class="result" id="r29"></div>
+</div>
+
+<div class="question-item" data-page="3">
+<div class="q-number">Q30</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC030.png">
+<div class="ans-btns"><button onclick="check(30,'A')">A</button><button onclick="check(30,'B')">B</button><button onclick="check(30,'C')">C</button><button onclick="check(30,'D')">D</button></div>
+<div class="result" id="r30"></div>
+</div>
+
+<!-- 第4頁 31–40題 -->
+<div class="question-item" data-page="4">
+<div class="q-number">Q31</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC031.png">
+<div class="ans-btns"><button onclick="check(31,'A')">A</button><button onclick="check(31,'B')">B</button><button onclick="check(31,'C')">C</button><button onclick="check(31,'D')">D</button></div>
+<div class="result" id="r31"></div>
+</div>
+
+<div class="question-item" data-page="4">
+<div class="q-number">Q32</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC032.png">
+<div class="ans-btns"><button onclick="check(32,'A')">A</button><button onclick="check(32,'B')">B</button><button onclick="check(32,'C')">C</button><button onclick="check(32,'D')">D</button></div>
+<div class="result" id="r32"></div>
+</div>
+
+<div class="question-item" data-page="4">
+<div class="q-number">Q33</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC033.png">
+<div class="ans-btns"><button onclick="check(33,'A')">A</button><button onclick="check(33,'B')">B</button><button onclick="check(33,'C')">C</button><button onclick="check(33,'D')">D</button></div>
+<div class="result" id="r33"></div>
+</div>
+
+<div class="question-item" data-page="4">
+<div class="q-number">Q34</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC034.png">
+<div class="ans-btns"><button onclick="check(34,'A')">A</button><button onclick="check(34,'B')">B</button><button onclick="check(34,'C')">C</button><button onclick="check(34,'D')">D</button></div>
+<div class="result" id="r34"></div>
+</div>
+
+<div class="question-item" data-page="4">
+<div class="q-number">Q35</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC035.png">
+<div class="ans-btns"><button onclick="check(35,'A')">A</button><button onclick="check(35,'B')">B</button><button onclick="check(35,'C')">C</button><button onclick="check(35,'D')">D</button></div>
+<div class="result" id="r35"></div>
+</div>
+
+<div class="question-item" data-page="4">
+<div class="q-number">Q36</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC036.png">
+<div class="ans-btns"><button onclick="check(36,'A')">A</button><button onclick="check(36,'B')">B</button><button onclick="check(36,'C')">C</button><button onclick="check(36,'D')">D</button></div>
+<div class="result" id="r36"></div>
+</div>
+
+<div class="question-item" data-page="4">
+<div class="q-number">Q37</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC037.png">
+<div class="ans-btns"><button onclick="check(37,'A')">A</button><button onclick="check(37,'B')">B</button><button onclick="check(37,'C')">C</button><button onclick="check(37,'D')">D</button></div>
+<div class="result" id="r37"></div>
+</div>
+
+<div class="question-item" data-page="4">
+<div class="q-number">Q38</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC038.png">
+<div class="ans-btns"><button onclick="check(38,'A')">A</button><button onclick="check(38,'B')">B</button><button onclick="check(38,'C')">C</button><button onclick="check(38,'D')">D</button></div>
+<div class="result" id="r38"></div>
+</div>
+
+<div class="question-item" data-page="4">
+<div class="q-number">Q39</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC039.png">
+<div class="ans-btns"><button onclick="check(39,'A')">A</button><button onclick="check(39,'B')">B</button><button onclick="check(39,'C')">C</button><button onclick="check(39,'D')">D</button></div>
+<div class="result" id="r39"></div>
+</div>
+
+<div class="question-item" data-page="4">
+<div class="q-number">Q40</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC040.png">
+<div class="ans-btns"><button onclick="check(40,'A')">A</button><button onclick="check(40,'B')">B</button><button onclick="check(40,'C')">C</button><button onclick="check(40,'D')">D</button></div>
+<div class="result" id="r40"></div>
+</div>
+
+<!-- 第5頁 41–50題 -->
+<div class="question-item" data-page="5">
+<div class="q-number">Q41</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC041.png">
+<div class="ans-btns"><button onclick="check(41,'A')">A</button><button onclick="check(41,'B')">B</button><button onclick="check(41,'C')">C</button><button onclick="check(41,'D')">D</button></div>
+<div class="result" id="r41"></div>
+</div>
+
+<div class="question-item" data-page="5">
+<div class="q-number">Q42</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC042.png">
+<div class="ans-btns"><button onclick="check(42,'A')">A</button><button onclick="check(42,'B')">B</button><button onclick="check(42,'C')">C</button><button onclick="check(42,'D')">D</button></div>
+<div class="result" id="r42"></div>
+</div>
+
+<div class="question-item" data-page="5">
+<div class="q-number">Q43</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC043.png">
+<div class="ans-btns"><button onclick="check(43,'A')">A</button><button onclick="check(43,'B')">B</button><button onclick="check(43,'C')">C</button><button onclick="check(43,'D')">D</button></div>
+<div class="result" id="r43"></div>
+</div>
+
+<div class="question-item" data-page="5">
+<div class="q-number">Q44</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC044.png">
+<div class="ans-btns"><button onclick="check(44,'A')">A</button><button onclick="check(44,'B')">B</button><button onclick="check(44,'C')">C</button><button onclick="check(44,'D')">D</button></div>
+<div class="result" id="r44"></div>
+</div>
+
+<div class="question-item" data-page="5">
+<div class="q-number">Q45</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC045.png">
+<div class="ans-btns"><button onclick="check(45,'A')">A</button><button onclick="check(45,'B')">B</button><button onclick="check(45,'C')">C</button><button onclick="check(45,'D')">D</button></div>
+<div class="result" id="r45"></div>
+</div>
+
+<div class="question-item" data-page="5">
+<div class="q-number">Q46</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC046.png">
+<div class="ans-btns"><button onclick="check(46,'A')">A</button><button onclick="check(46,'B')">B</button><button onclick="check(46,'C')">C</button><button onclick="check(46,'D')">D</button></div>
+<div class="result" id="r46"></div>
+</div>
+
+<div class="question-item" data-page="5">
+<div class="q-number">Q47</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC047.png">
+<div class="ans-btns"><button onclick="check(47,'A')">A</button><button onclick="check(47,'B')">B</button><button onclick="check(47,'C')">C</button><button onclick="check(47,'D')">D</button></div>
+<div class="result" id="r47"></div>
+</div>
+
+<div class="question-item" data-page="5">
+<div class="q-number">Q48</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC048.png">
+<div class="ans-btns"><button onclick="check(48,'A')">A</button><button onclick="check(48,'B')">B</button><button onclick="check(48,'C')">C</button><button onclick="check(48,'D')">D</button></div>
+<div class="result" id="r48"></div>
+</div>
+
+<div class="question-item" data-page="5">
+<div class="q-number">Q49</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC049.png">
+<div class="ans-btns"><button onclick="check(49,'A')">A</button><button onclick="check(49,'B')">B</button><button onclick="check(49,'C')">C</button><button onclick="check(49,'D')">D</button></div>
+<div class="result" id="r49"></div>
+</div>
+
+<div class="question-item" data-page="5">
+<div class="q-number">Q50</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC050.png">
+<div class="ans-btns"><button onclick="check(50,'A')">A</button><button onclick="check(50,'B')">B</button><button onclick="check(50,'C')">C</button><button onclick="check(50,'D')">D</button></div>
+<div class="result" id="r50"></div>
+</div>
+
+<!-- 第6頁 51–52題 -->
+<div class="question-item" data-page="6">
+<div class="q-number">Q51</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC051.png">
+<div class="ans-btns"><button onclick="check(51,'A')">A</button><button onclick="check(51,'B')">B</button><button onclick="check(51,'C')">C</button><button onclick="check(51,'D')">D</button></div>
+<div class="result" id="r51"></div>
+</div>
+
+<div class="question-item" data-page="6">
+<div class="q-number">Q52</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch04/DSE_Phy_Bk1_Ch04_MC052.png">
+<div class="ans-btns"><button onclick="check(52,'A')">A</button><button onclick="check(52,'B')">B</button><button onclick="check(52,'C')">C</button><button onclick="check(52,'D')">D</button></div>
+<div class="result" id="r52"></div>
+</div>
+
+<script>
+const ansData = {
+1:{ans:"C",expl:"在沸騰和蒸發的過程中，物質會從液態轉變為氣態，在兩個過程中都會吸收潛熱。在凝結的過程中，物質會從氣態轉變為液態，在過程中會釋放潛熱。"},
+2:{ans:"B",expl:"在t1‒t2時，X和Y都正從液體蒸發變成氣體，它們的內能正在增加。在此時段內，液體和氣體同時存在。由於X在蒸發時的溫度較高，因此X的沸點較Y高。Y要用較長時間才能從液態轉變為氣態，這表示Y需要較多能量來汽化。X和Y的質量相同，所以Y的汽化比潛熱也較高。"},
+3:{ans:"C",expl:"在BC和DE段，物質的溫度沒有變化，表示物質在這兩段都正在轉變物態。在BC段，物質正從氣態轉變為液態，這時物質處於沸點。在DE段，物質正從液態轉變為固態。物質在這兩段都會釋放潛熱。在CD段，物質完全是液態。"},
+4:{ans:"A",expl:"沸騰期間，電熱器提供的能量 = 酒精獲得的能量\nP × (3×60) = (0.25−0.23) × 8.55×10⁵\nP = 95 W"},
+5:{ans:"D",expl:"物體的內能取決於質量、溫度和物態。溫度相同時，質量較大的冰內能較高：(iv) < (ii)。質量相同時，0°C水比0°C冰內能高：(ii) < (i)。溫度相同時，質量較大的水內能較高：(i) < (iii)。最終：(iv) < (ii) < (i) < (iii)"},
+6:{ans:"D",expl:"冰熔解時會吸收潛熱，使它的內能增加，因此D的敘述不正確。"},
+7:{ans:"A",expl:"直至冰完全熔化後，水從四周環境獲取能量而變熱。由於水溫在時間R後維持不變，因此混合物在時間R與四周環境達到熱平衡。(1)正確。在P和Q之間，冰不斷熔化，沒有水變成冰，(2)(3)錯。"},
+8:{ans:"C",expl:"(1)錯：蒸汽凝結時會向鏡子釋放能量。(2)正確：空氣流通可減少蒸汽凝結。(3)正確：鏡子發熱令蒸汽無法凝結。"},
+9:{ans:"D",expl:"X升溫更快，代表固態X的比熱容量比Y低，因此D錯。A、B、C三項敘述均正確。"},
+10:{ans:"A",expl:"空氣中的水蒸氣遇到冷管表面時溫度下降，從而凝結成水，達到抽濕效果。"},
+11:{ans:"C",expl:"空氣中的水蒸氣遇到肉塊周圍的冷空氣時溫度下降，凝結成小水滴，形成霧氣。"},
+12:{ans:"C",expl:"(1)加入更多液體可減少熱散失；(3)聚苯乙烯杯隔熱更好。(2)加蓋會讓汽化水回流，影響結果。"},
+13:{ans:"D",expl:"(2)正確：Y有蓋，蒸發散熱最慢，對應P曲線。(3)正確：最終溫度26°C為室溫。(1)錯：R對應黑色Z杯。"},
+14:{ans:"D",expl:"(1)啞黑輻射散熱快；(2)金屬導熱快；(3)風大加速蒸發。三者都能冷卻得更快。"},
+15:{ans:"B",expl:"熔解時溫度不變，分子平均動能不變；分子間距變大，平均勢能增加。"},
+16:{ans:"C",expl:"先升溫至熔點10°C，然後恆溫熔解，完全變液體後再升溫至室溫25°C。"},
+17:{ans:"D",expl:"兩者都是液態，分子勢能相近；溫度不同，熱水的分子平均動能較大，因此內能較高。"},
+18:{ans:"B",expl:"比熱容量：每單位質量升1°C所需能量。汽化比潛熱：定溫下每單位質量液體變氣體所需能量。"},
+19:{ans:"C",expl:"電熱器提供能量 = 液體吸收潛熱\n200×300 = 0.015×lv\nlv = 4×10⁶ J kg⁻¹"},
+20:{ans:"B",expl:"多風(1)可帶走水蒸氣、溫暖(3)提升蒸發率；潮濕(2)會降低蒸發率。"},
+21:{ans:"B",expl:"20°C高於N的熔點、低於沸點，故N為液態；L為固態，M為氣態。"},
+22:{ans:"A",expl:"能量 E = m×lf = 0.2×3.9×10⁵ J"},
+23:{ans:"C",expl:"降低溫度會減慢蒸發，其他三項均可增加蒸發率。"},
+24:{ans:"A",expl:"E = 0.005×3.34×10⁵ = 1670 J"},
+25:{ans:"C",expl:"需要汽化潛熱(2)與水的熱容量(1)，不需熔解潛熱。"},
+26:{ans:"A",expl:"沸騰與蒸發都需要吸收汽化潛熱，因此A錯。"},
+27:{ans:"C",expl:"(2)增加表面積、(3)提高溫度可提升蒸發率；(1)無效。"},
+28:{ans:"B",expl:"水失熱 = 冰吸熱\n0.5×4200×93 = m×(2100×5 + 3.34×10⁵ + 4200×5)\n解得 m = 0.53 kg"},
+29:{ans:"C",expl:"蒸汽釋放能量 = 魚吸收能量\n0.05×2.26×10⁶ + 0.05×4200×(100−T) = 0.8×3430×(T−20)\nT = 63.9°C"},
+30:{ans:"B",expl:"P×120 = 0.03×2.26×10⁶\nP = 565 W"},
+31:{ans:"B",expl:"必須知道冰的質量，故要量混合後總質量。"},
+32:{ans:"B",expl:"M×(2.26×10⁶+4200×50) = m×(3.34×10⁵+4200×50)\nM/m = 0.22"},
+33:{ans:"A",expl:"水平段代表溫度不變，但持續吸熱，內能增加、物態改變。"},
+34:{ans:"C",expl:"0.25×4200×(40−T) = 0.025×3.34×10⁵ + 0.025×4200×T\nT = 29.1°C"},
+35:{ans:"B",expl:"(1)緊包電熱器、(3)對照穩定後開始，可提升準確度；(2)不必隔熱漏斗。"},
+36:{ans:"D",expl:"3m×5300×(T−4) = m×3.34×10⁵ + m×4200×4\nT = 26.1°C"},
+37:{ans:"D",expl:"E4=370，E2=4200，E3=2.1×10⁵，E1=3.34×10⁵ → E4<E2<E3<E1"},
+38:{ans:"B",expl:"(1)蒸發帶走高動能分子，平均動能下降；(3)蒸發吸熱；(2)任何溫度都可蒸發。"},
+39:{ans:"B",expl:"(2)電熱器完全插入可減少熱散失；(1)冰溫不必低於0°C；(3)不必蓋漏斗。"},
+40:{ans:"B",expl:"液態P升溫更快，比熱容量較低，故B錯。"},
+41:{ans:"D",expl:"水失去能量 = 冰吸熱（熔解+升溫）\n0.2c×20.5 = 0.05lf + 0.05c×4.5"},
+42:{ans:"A",expl:"E3=1.09×10⁵，E1=3.34×10⁵，E4=8.41×10⁵，E2=2.26×10⁶ → E3<E1<E4<E2"},
+43:{ans:"A",expl:"加熱一定增加內能；動能與勢能至少一項增加，不一定兩項。"},
+44:{ans:"C",expl:"B升溫較快，比熱容量較低，故C錯。"},
+45:{ans:"D",expl:"1000t = 1.5×2.26×10⁶ → t=3390s=56.5min"},
+46:{ans:"A",expl:"沸騰時溫度不變，平均動能不變，仍會吸熱。"},
+47:{ans:"D",expl:"凝固時溫度不變、釋放能量、動能不變、勢能減少。"},
+48:{ans:"A",expl:"冰水混合物在結冰完成前保持0°C。"},
+49:{ans:"C",expl:"(1)凝結放熱，空氣變暖；(2)涉及汽化潛熱；(3)表面可同時蒸發與凝結。"},
+50:{ans:"B",expl:"加熱至沸騰：P×600 = m×4200×85 → P=595m\n汽化：Pt = m×2.26×10⁶ → t≈3800s≈60min"},
+51:{ans:"B",expl:"冰完全熔化所需熱量大於水冷卻至0°C釋放熱量，故最終0°C且仍有冰。"},
+52:{ans:"B",expl:"(2)水濺出會令質量變化偏大，算出潛熱變小；(1)(3)令結果偏大。"}
+};
+
+function check(qid, choice) {
+  const resBox = document.getElementById(`r${qid}`);
+  const correct = ansData[qid].ans;
+  const expl = ansData[qid].expl;
+  resBox.style.display = "block";
+  if (choice === correct) {
+    resBox.className = "result correct";
+    resBox.innerHTML = `✅ 正確\n答案：${correct}\n解釋：${expl}`;
+  } else {
+    resBox.className = "result wrong";
+    resBox.innerHTML = `❌ 錯誤\n正確答案：${correct}\n解釋：${expl}`;
+  }
+}
+
+function showPage(page) {
+  document.querySelectorAll('.page-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active', i+1===page);
+  });
+  document.querySelectorAll('.question-item').forEach(item=>{
+    item.classList.toggle('show', +item.dataset.page === page);
+  });
+}
+</script>
+</body>
+</html>
