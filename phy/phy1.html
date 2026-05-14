@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物理 Chapter 1 MC 1–20題｜最終穩定版</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
+body{background:#f5f7fa;padding:20px}
+.title{text-align:center;font-size:26px;margin-bottom:20px;color:#222}
+.page-nav{text-align:center;margin-bottom:24px}
+.page-btn{padding:10px 16px;margin:0 4px;border:none;border-radius:6px;background:#cce7ff;cursor:pointer}
+.page-btn.active{background:#66b3ff;color:#fff}
+.question-item{background:white;border-radius:12px;padding:22px;margin:0 auto 22px auto;max-width:920px;border:1px solid #ddd;display:none}
+.question-item.show{display:block}
+.q-label{font-size:20px;font-weight:bold;margin-bottom:12px;color:#222}
+.question-item img{max-width:100%;height:auto;border-radius:8px;margin-bottom:18px}
+.ans-btns{display:flex;gap:12px;margin-bottom:14px}
+.ans-btns button{flex:1;padding:14px;font-size:16px;border:none;border-radius:8px;background:#cce7ff;color:#004488;cursor:pointer}
+.ans-btns button:hover{background:#b3d9ff}
+.ans-btns button:disabled{background:#ccc;color:#666;cursor:not-allowed}
+.result{padding:16px;border-radius:8px;font-size:18px;line-height:1.6;display:none;white-space:pre-wrap}
+.correct{background:#d1e7dd;color:#0a5633;border:1px solid #badbcc}
+.wrong{background:#f8d7da;color:#842029;border:1px solid #f5c2c7}
+.stat{margin-top:10px;font-size:15px;color:#333;padding:8px;background:#f0f7ff;border-radius:6px}
+.sync-bar{text-align:center;margin:30px 0}
+.sync-btn{padding:14px 30px;font-size:18px;background:#28a745;color:white;border:none;border-radius:8px;cursor:pointer}
+.sync-btn:hover{background:#218838}
+</style>
+</head>
+<body>
+<div class="title">Book 1 第1課 物理溫度與溫度計 選擇題 1–20題<br>按鈕提交同步版</div>
+
+<div class="page-nav">
+<button class="page-btn active" onclick="showPage(1)">1–10題</button>
+<button class="page-btn" onclick="showPage(2)">11–20題</button>
+</div>
+
+<!-- ===================== Q1–10 ===================== -->
+<div class="question-item show" data-page="1" data-qid="1">
+<div class="q-label">Q1</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC001.png">
+<div class="ans-btns"><button onclick="check(1,'A')">A</button><button onclick="check(1,'B')">B</button><button onclick="check(1,'C')">C</button><button onclick="check(1,'D')">D</button></div>
+<div class="result" id="r1"></div>
+<div class="stat" id="s1"></div>
+</div>
+
+<div class="question-item show" data-page="1" data-qid="2">
+<div class="q-label">Q2</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC002.png">
+<div class="ans-btns"><button onclick="check(2,'A')">A</button><button onclick="check(2,'B')">B</button><button onclick="check(2,'C')">C</button><button onclick="check(2,'D')">D</button></div>
+<div class="result" id="r2"></div>
+<div class="stat" id="s2"></div>
+</div>
+
+<div class="question-item show" data-page="1" data-qid="3">
+<div class="q-label">Q3</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC003.png">
+<div class="ans-btns"><button onclick="check(3,'A')">A</button><button onclick="check(3,'B')">B</button><button onclick="check(3,'C')">C</button><button onclick="check(3,'D')">D</button></div>
+<div class="result" id="r3"></div>
+<div class="stat" id="s3"></div>
+</div>
+
+<div class="question-item show" data-page="1" data-qid="4">
+<div class="q-label">Q4</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC004.png">
+<div class="ans-btns"><button onclick="check(4,'A')">A</button><button onclick="check(4,'B')">B</button><button onclick="check(4,'C')">C</button><button onclick="check(4,'D')">D</button></div>
+<div class="result" id="r4"></div>
+<div class="stat" id="s4"></div>
+</div>
+
+<div class="question-item show" data-page="1" data-qid="5">
+<div class="q-label">Q5</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC005.png">
+<div class="ans-btns"><button onclick="check(5,'A')">A</button><button onclick="check(5,'B')">B</button><button onclick="check(5,'C')">C</button><button onclick="check(5,'D')">D</button></div>
+<div class="result" id="r5"></div>
+<div class="stat" id="s5"></div>
+</div>
+
+<div class="question-item show" data-page="1" data-qid="6">
+<div class="q-label">Q6</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC006.png">
+<div class="ans-btns"><button onclick="check(6,'A')">A</button><button onclick="check(6,'B')">B</button><button onclick="check(6,'C')">C</button><button onclick="check(6,'D')">D</button></div>
+<div class="result" id="r6"></div>
+<div class="stat" id="s6"></div>
+</div>
+
+<div class="question-item show" data-page="1" data-qid="7">
+<div class="q-label">Q7</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC007.png">
+<div class="ans-btns"><button onclick="check(7,'A')">A</button><button onclick="check(7,'B')">B</button><button onclick="check(7,'C')">C</button><button onclick="check(7,'D')">D</button></div>
+<div class="result" id="r7"></div>
+<div class="stat" id="s7"></div>
+</div>
+
+<div class="question-item show" data-page="1" data-qid="8">
+<div class="q-label">Q8</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC008.png">
+<div class="ans-btns"><button onclick="check(8,'A')">A</button><button onclick="check(8,'B')">B</button><button onclick="check(8,'C')">C</button><button onclick="check(8,'D')">D</button></div>
+<div class="result" id="r8"></div>
+<div class="stat" id="s8"></div>
+</div>
+
+<div class="question-item show" data-page="1" data-qid="9">
+<div class="q-label">Q9</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC009.png">
+<div class="ans-btns"><button onclick="check(9,'A')">A</button><button onclick="check(9,'B')">B</button><button onclick="check(9,'C')">C</button><button onclick="check(9,'D')">D</button></div>
+<div class="result" id="r9"></div>
+<div class="stat" id="s9"></div>
+</div>
+
+<div class="question-item show" data-page="1" data-qid="10">
+<div class="q-label">Q10</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC010.png">
+<div class="ans-btns"><button onclick="check(10,'A')">A</button><button onclick="check(10,'B')">B</button><button onclick="check(10,'C')">C</button><button onclick="check(10,'D')">D</button></div>
+<div class="result" id="r10"></div>
+<div class="stat" id="s10"></div>
+</div>
+
+<!-- ===================== Q11–20 ===================== -->
+<div class="question-item" data-page="2" data-qid="11">
+<div class="q-label">Q11</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC011.png">
+<div class="ans-btns"><button onclick="check(11,'A')">A</button><button onclick="check(11,'B')">B</button><button onclick="check(11,'C')">C</button><button onclick="check(11,'D')">D</button></div>
+<div class="result" id="r11"></div>
+<div class="stat" id="s11"></div>
+</div>
+
+<div class="question-item" data-page="2" data-qid="12">
+<div class="q-label">Q12</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC012.png">
+<div class="ans-btns"><button onclick="check(12,'A')">A</button><button onclick="check(12,'B')">B</button><button onclick="check(12,'C')">C</button><button onclick="check(12,'D')">D</button></div>
+<div class="result" id="r12"></div>
+<div class="stat" id="s12"></div>
+</div>
+
+<div class="question-item" data-page="2" data-qid="13">
+<div class="q-label">Q13</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC013.png">
+<div class="ans-btns"><button onclick="check(13,'A')">A</button><button onclick="check(13,'B')">B</button><button onclick="check(13,'C')">C</button><button onclick="check(13,'D')">D</button></div>
+<div class="result" id="r13"></div>
+<div class="stat" id="s13"></div>
+</div>
+
+<div class="question-item" data-page="2" data-qid="14">
+<div class="q-label">Q14</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC014.png">
+<div class="ans-btns"><button onclick="check(14,'A')">A</button><button onclick="check(14,'B')">B</button><button onclick="check(14,'C')">C</button><button onclick="check(14,'D')">D</button></div>
+<div class="result" id="r14"></div>
+<div class="stat" id="s14"></div>
+</div>
+
+<div class="question-item" data-page="2" data-qid="15">
+<div class="q-label">Q15</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC015.png">
+<div class="ans-btns"><button onclick="check(15,'A')">A</button><button onclick="check(15,'B')">B</button><button onclick="check(15,'C')">C</button><button onclick="check(15,'D')">D</button></div>
+<div class="result" id="r15"></div>
+<div class="stat" id="s15"></div>
+</div>
+
+<div class="question-item" data-page="2" data-qid="16">
+<div class="q-label">Q16</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC016.png">
+<div class="ans-btns"><button onclick="check(16,'A')">A</button><button onclick="check(16,'B')">B</button><button onclick="check(16,'C')">C</button><button onclick="check(16,'D')">D</button></div>
+<div class="result" id="r16"></div>
+<div class="stat" id="s16"></div>
+</div>
+
+<div class="question-item" data-page="2" data-qid="17">
+<div class="q-label">Q17</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC017.png">
+<div class="ans-btns"><button onclick="check(17,'A')">A</button><button onclick="check(17,'B')">B</button><button onclick="check(17,'C')">C</button><button onclick="check(17,'D')">D</button></div>
+<div class="result" id="r17"></div>
+<div class="stat" id="s17"></div>
+</div>
+
+<div class="question-item" data-page="2" data-qid="18">
+<div class="q-label">Q18</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC018.png">
+<div class="ans-btns"><button onclick="check(18,'A')">A</button><button onclick="check(18,'B')">B</button><button onclick="check(18,'C')">C</button><button onclick="check(18,'D')">D</button></div>
+<div class="result" id="r18"></div>
+<div class="stat" id="s18"></div>
+</div>
+
+<div class="question-item" data-page="2" data-qid="19">
+<div class="q-label">Q19</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC019.png">
+<div class="ans-btns"><button onclick="check(19,'A')">A</button><button onclick="check(19,'B')">B</button><button onclick="check(19,'C')">C</button><button onclick="check(19,'D')">D</button></div>
+<div class="result" id="r19"></div>
+<div class="stat" id="s19"></div>
+</div>
+
+<div class="question-item" data-page="2" data-qid="20">
+<div class="q-label">Q20</div>
+<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC020.png">
+<div class="ans-btns"><button onclick="check(20,'A')">A</button><button onclick="check(20,'B')">B</button><button onclick="check(20,'C')">C</button><button onclick="check(20,'D')">D</button></div>
+<div class="result" id="r20"></div>
+<div class="stat" id="s20"></div>
+</div>
+
+<!-- ===================== 提交同步按鈕 ===================== -->
+<div class="sync-bar">
+  <button class="sync-btn" onclick="submitToGitHub()">✅ 提交並同步答題記錄到 GitHub</button>
+</div>
+
+<script>
+// ===================== 你只需要填這裡 =====================
+const USER = "cychanclassroom";
+const REPO = "web";
+const TOKEN = "貼上你自己的 GitHub Token";
+const FILE_PATH = "phy/record.json";
+// ==========================================================
+
+const ansData = {
+1:{ans:"B",expl:"攝氏溫標的高定點是 100 °C，而冰點和正在熔化的冰的溫度都是 0 °C。"},
+2:{ans:"C",expl:"玻管液體溫度計中的液體隨溫度膨脹。"},
+3:{ans:"A",expl:"華氏和開氏溫標是另外兩個溫度計常用的溫標。"},
+4:{ans:"D",expl:"自來水的溫度等於室溫，溫度高於 0 °C。冷藏格的溫度低於0 °C，因此其中的冰塊的溫度也低於0 °C。正在熔化的冰的溫度為 0 °C。乾冰的溫度低於 −78.5 °C。"},
+5:{ans:"D",expl:"溫度上升時，玻管液體溫度計中的液體會膨脹。由於溫度計X中液體的體積比Y大，所以溫度增幅相同時，X中液體體積的增幅比Y大。因此，不論在室溫還是汽點，X的液體柱都會比Y的長。"},
+6:{ans:"B",expl:"根據實線，讀數120 C對應電阻值100 Ω。根據虛線，電阻值100 Ω對應的實際溫度高於120 °C。"},
+7:{ans:"B",expl:"選項B中，該城市在12月至2月期間的每月平均溫度最高，而且在12個月內，每月平均溫度的變化小於15 C。"},
+8:{ans:"B",expl:"物質的體積和電阻可能隨它的溫度改變。所有物質的質量不會隨它的溫度改變。"},
+9:{ans:"D",expl:"物體的溫度愈高，它放出的紅外輻射的強度愈高。紅外輻射溫度計測量物體放出的紅外輻射強度，就可以量度得它的溫度。"},
+10:{ans:"C",expl:"物料的物性P隨溫度T變化，且每個P值只對應單一溫度T時，溫度計可利用該物料的PT關係來量度溫度。物料X和Y的物性P都合乎上述的條件。"},
+11:{ans:"C",expl:"當R是100 Ω，溫度是55 °C。"},
+12:{ans:"A",expl:"減少玻璃管的直徑會使酒精柱在相同的溫度變化下，長度變化較大。這可以提高溫度計的靈敏度。玻璃管的長度不影響溫度計的靈敏度。如果液體在相同溫度升幅下膨脹較少，溫度計的靈敏度會較低。"},
+13:{ans:"B",expl:"攝氏溫標的低定點是0 C。很多地方冬天時的溫度會低於0 C。高定點是在標準大氣壓強下，純水沸騰的溫度，即100 C。蒸汽的溫度可比100 C高。攝氏溫標的單位是攝氏度 (C)。"},
+14:{ans:"D",expl:"25°C 到 100°C 上升 75°C，液柱上升 16cm；高出 8cm 即上升 37.5°C，T = 25 + 37.5 = 62.5°C"},
+15:{ans:"D",expl:"玻管水銀溫度計比玻管酒精溫度計能量度更高的溫度。水銀是良好的導熱體，而酒精是不良的導熱體。以無毒的酒精代替有毒的水銀，可以使溫度計更加安全。"},
+16:{ans:"A",expl:"攝氏溫標的低定點是在標準大氣壓強下，純冰熔化時的溫度，設定為0 °C。很多地方冬天時的溫度會低於0 C。"},
+17:{ans:"B",expl:"最熱的時間約是13:30。當天的最高和最低溫度分別大約是29.1 °C和24.6 °C，因此整日的溫度變化小於5 °C。由08:00直至中午，溫度曾出現三次下降。"},
+18:{ans:"A",expl:"溫度表示物體的冷熱程度。某些現象，如物質的熔化和沸騰，在特定的大氣壓強下，會在特定的溫度發生。攝氏度（或開 / 華氏度）是溫度的單位。"},
+19:{ans:"B",expl:"物料的物性P隨溫度T變化，且每個P值只對應單一溫度T時，溫度計可利用該物料的PT關係來量度溫度。只有選項B合乎這些條件。"},
+20:{ans:"D",expl:"10°C~110°C 共100°C對應20cm，每cm=5°C；10cm對應50°C，從0°C起算即為50°C？修正：10°C到110°C是20cm=100°C，1cm=5°C；水銀柱比0°C高10cm → T=10 + (10/20)×100 = 60°C"}
+};
+
+let rightSet = new Set(JSON.parse(localStorage.getItem("right") || "[]"));
+let wrongSet = new Set(JSON.parse(localStorage.getItem("wrong") || "[]"));
+
+window.onload = function(){
+  renderAllStats();
+  lockAnswered();
+};
+
+// 答題（選完即鎖）
+function check(qid, choice) {
+  const btns = document.querySelector(`[data-qid="${qid}"]`).querySelectorAll("button");
+  btns.forEach(b => b.disabled = true);
+
+  const resBox = document.getElementById(`r${qid}`);
+  resBox.style.display = "block";
+  const correct = ansData[qid].ans;
+
+  if (choice === correct) {
+    resBox.className = "result correct";
+    resBox.innerHTML = `✅ 正確\n答案：${correct}\n解釋：${ansData[qid].expl}`;
+    rightSet.add(qid);
+    wrongSet.delete(qid);
+  } else {
+    resBox.className = "result wrong";
+    resBox.innerHTML = `❌ 錯誤\n正確答案：${correct}\n解釋：${ansData[qid].expl}`;
+    wrongSet.add(qid);
+    rightSet.delete(qid);
+  }
+
+  localStorage.setItem("right", JSON.stringify([...rightSet]));
+  localStorage.setItem("wrong", JSON.stringify([...wrongSet]));
+  renderOneStat(qid);
+}
+
+// 統計顯示
+function renderOneStat(qid) {
+  const s = document.getElementById(`s${qid}`);
+  const r = rightSet.has(qid) ? "✅ 曾答對" : "";
+  const w = wrongSet.has(qid) ? "❌ 曾答錯" : "";
+  s.innerText = (r + " " + w).trim() || "📝 未作答";
+}
+function renderAllStats() {
+  for (let i = 1; i <= 20; i++) renderOneStat(i);
+}
+function lockAnswered() {
+  for (let q = 1; q <= 20; q++) {
+    if (rightSet.has(q) || wrongSet.has(q)) {
+      document.querySelector(`[data-qid="${q}"]`).querySelectorAll("button").forEach(b => b.disabled = true);
+    }
+  }
+}
+
+// ===================== 【核心】提交按鈕 100% 上傳 =====================
+async function submitToGitHub() {
+  if (!confirm("確定要提交並同步答題記錄到 GitHub？")) return;
+
+  const payload = { right: [...rightSet], wrong: [...wrongSet] };
+  const content = btoa(JSON.stringify(payload));
+
+  try {
+    // 拿 sha
+    const resSha = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`, {
+      headers: { Authorization: `token ${TOKEN}` }
+    });
+    const dataSha = await resSha.json();
+    const sha = dataSha.sha;
+
+    // 上傳
+    const resUpload = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "學生提交答題記錄",
+        content: content,
+        sha: sha
+      })
+    });
+
+    if (resUpload.ok) {
+      alert("✅ 提交成功！記錄已同步到 GitHub！");
+    } else {
+      alert("❌ 同步失敗，請檢查 Token 或網絡");
+    }
+  } catch (err) {
+    alert("❌ 同步失敗：本地模式 CORS 限制，請上傳 GitHub Pages 後使用");
+    console.log(err);
+  }
+}
+
+// 分頁
+function showPage(page) {
+  document.querySelectorAll('.page-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i + 1 === page);
+  });
+  document.querySelectorAll('.question-item').forEach(item => {
+    item.classList.toggle('show', +item.dataset.page === page);
+  });
+}
+</script>
+</body>
+</html>
