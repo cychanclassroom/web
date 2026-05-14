@@ -215,19 +215,16 @@ function check(qid,sel){
 }
 
 // 🔥 強制寫入，無任何阻擋
-async function submitNow(){
-  const payload = {right:[...right], wrong:[...wrong]};
-  const content = btoa(JSON.stringify(payload));
-  const shaRes = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE}`,{
-    headers:{Authorization:`token ${TOKEN}`}
-  });
-  const sha = (await shaRes.json()).sha;
-
-  const put = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE}`,{
-    method:"PUT",
-    headers:{Authorization:`token ${TOKEN}`,"Content-Type":"application/json"},
-    body:JSON.stringify({message:"強制寫入", content, sha})
-  });
+// 替换你原来的读取json代码
+async function loadRecord() {
+  // 加?_=时间戳，绕开CDN缓存
+  const url = `https://api.github.com/repos/cychanclassroom/web/contents/phy/record.json?_=${Date.now()}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const json = JSON.parse(atob(data.content));
+  // 读取后更新页面显示
+  document.getElementById("summary").innerText = `📊 最新记录：答对${json.right.length}题｜答错${json.wrong.length}题`;
+}
 
   if(put.ok) alert("✅ 寫入成功！立即去 GitHub 刷新 json");
   else alert("❌ Token 權限不足，請重製 Token");
