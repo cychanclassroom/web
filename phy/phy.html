@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>物理 Chapter 1 MC 1–20題｜最終穩定版</title>
+<title>物理 Chapter 1 MC 1–20題｜零錯誤版</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
 body{background:#f5f7fa;padding:20px}
@@ -290,6 +290,12 @@ function lockAnswered() {
 async function submitToGitHub() {
   if (!confirm("確定要提交並同步答題記錄到 GitHub？")) return;
 
+  // 只在 github.io 運行，本地模式自動跳過
+  if (!window.location.hostname.includes("github.io")) {
+    alert("⚠️ 本地模式 CORS 限制，請用 GitHub Pages 網址打開！");
+    return;
+  }
+
   const payload = { right: [...rightSet], wrong: [...wrongSet] };
   const content = btoa(JSON.stringify(payload));
 
@@ -321,7 +327,7 @@ async function submitToGitHub() {
       alert("❌ 同步失敗，請檢查 Token 或網絡");
     }
   } catch (err) {
-    alert("❌ 同步失敗：本地模式 CORS 限制，請上傳 GitHub Pages 後使用");
+    alert("❌ 同步失敗，請確保 Token 有效且有 repo 權限");
     console.log(err);
   }
 }
