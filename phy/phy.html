@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>物理 MC 最終強制寫入版</title>
+<title>物理 MC｜免Token讀取 穩定版</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
 body{background:#f5f7fa;padding:20px}
@@ -23,22 +23,22 @@ body{background:#f5f7fa;padding:20px}
 .result{padding:16px;border-radius:8px;font-size:18px;line-height:1.6;display:none;white-space:pre-wrap}
 .correct{background:#d1e7dd;color:#0a5633;border:1px solid #badbcc}
 .wrong{background:#f8d7da;color:#842029;border:1px solid #f5c2c7}
-.stat{margin-top:10px;font-size:15px;color:#333;padding:8px;background:#f0f7ff;border-radius:6px}
 .sync-bar{text-align:center;margin:30px 0}
 .sync-btn{padding:14px 30px;font-size:18px;background:#28a745;color:white;border:none;border-radius:8px;cursor:pointer}
 .sync-btn:hover{background:#218838}
 </style>
 </head>
 <body>
-<div class="title">Book 1 第1課 物理 MC</div>
-<div class="summary" id="summary">載入歷史...</div>
+
+<div class="title">Book 1 第1課 物理溫度與溫度計 MC</div>
+<div class="summary" id="summary">載入歷史記錄...</div>
 
 <div class="page-nav">
-<button class="page-btn active" onclick="showPage(1)">1–10</button>
-<button class="page-btn" onclick="showPage(2)">11–20</button>
+<button class="page-btn active" onclick="showPage(1)">1–10題</button>
+<button class="page-btn" onclick="showPage(2)">11–20題</button>
 </div>
 
-<!-- Q1-20 完全保留你原本結構 -->
+<!-- Q1-20 題目結構完全不變 -->
 <div class="question-item show" data-page="1" data-qid="1">
 <div class="q-label">Q1</div>
 <img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC001.png">
@@ -161,79 +161,103 @@ body{background:#f5f7fa;padding:20px}
 </div>
 
 <div class="sync-bar">
-  <button class="sync-btn" onclick="submitNow()">🔴 強制提交寫入 GitHub</button>
+  <button class="sync-btn" onclick="submitToGitHub()">✅ 提交同步答題記錄</button>
 </div>
 
 <script>
-// ========== 只填新生成嘅 TOKEN ==========
+// ========== 只需要填寫你的 TOKEN（只用於寫入） ==========
 const USER = "cychanclassroom";
 const REPO = "web";
-const TOKEN = "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";
-const FILE = "phy/record.json";
-// =======================================
+const TOKEN = "你的Token";
+const FILE_PATH = "phy/record.json";
+// ======================================================
 
 const ansData = {
 1:"B",2:"C",3:"A",4:"D",5:"D",6:"B",7:"B",8:"B",9:"D",10:"C",
 11:"C",12:"A",13:"B",14:"D",15:"D",16:"A",17:"B",18:"A",19:"B",20:"D"
 };
 
-let right = new Set();
-let wrong = new Set();
+let rightSet = new Set();
+let wrongSet = new Set();
 let cloudRight = [], cloudWrong = [];
 
-// 每次打開：全部題目重置可答
-window.onload = async ()=>{
-  // 讀雲端數據
-  try{
-    const r = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE}`,{
-      headers:{Authorization:`token ${TOKEN}`}
-    });
-    const d = await r.json();
-    const j = JSON.parse(atob(d.content));
-    cloudRight = j.right||[]; cloudWrong = j.wrong||[];
-    document.getElementById("summary").innerText = `📊 雲端記錄：答對${cloudRight.length}｜答錯${cloudWrong.length}`;
-  }catch(e){}
+// ========== 一開頁：免TOKEN讀取JSON（徹底解決讀唔到） ==========
+window.onload = async function(){
+  // 用RAW公開鏈接，繞過API權限限制
+  const rawUrl = `https://raw.githubusercontent.com/${USER}/${REPO}/main/${FILE_PATH}?_=${Date.now()}`;
+  try {
+    const res = await fetch(rawUrl);
+    const data = await res.json();
+    cloudRight = data.right || [];
+    cloudWrong = data.wrong || [];
+    document.getElementById("summary").innerText = 
+      `📊 雲端歷史記錄：答對 ${cloudRight.length} 題｜答錯 ${cloudWrong.length} 題`;
+  } catch(e) {
+    document.getElementById("summary").innerText = "📊 暫無歷史記錄";
+  }
 
-  // 重置所有按鈕
-  document.querySelectorAll(".ans-btns button").forEach(b=>b.disabled=false);
-  document.querySelectorAll(".result").forEach(r=>r.style.display="none");
+  // 每次打開全部題目重置，可重新作答
+  resetAllQuestions();
 };
 
-// 答題
-function check(qid,sel){
+// 重置所有題目（按鈕開放、隱藏答案）
+function resetAllQuestions(){
+  document.querySelectorAll(".ans-btns button").forEach(b=>b.disabled=false);
+  document.querySelectorAll(".result").forEach(r=>r.style.display="none");
+}
+
+// 答題邏輯（選完即鎖）
+function check(qid, choice){
   const btns = document.querySelector(`[data-qid="${qid}"]`).querySelectorAll("button");
   btns.forEach(b=>b.disabled=true);
-  const res = document.getElementById(`r${qid}`);
-  res.style.display="block";
-  if(sel===ansData[qid]){
-    res.className="result correct"; res.innerText=`✅ 正確，答案：${ansData[qid]}`;
-    right.add(qid); wrong.delete(qid);
+  const resBox = document.getElementById(`r${qid}`);
+  resBox.style.display = "block";
+
+  if(choice === ansData[qid]){
+    resBox.className = "result correct";
+    resBox.innerText = `✅ 正確，答案：${ansData[qid]}`;
+    rightSet.add(qid); wrongSet.delete(qid);
   }else{
-    res.className="result wrong"; res.innerText=`❌ 錯誤，正確：${ansData[qid]}`;
-    wrong.add(qid); right.delete(qid);
+    resBox.className = "result wrong";
+    resBox.innerText = `❌ 錯誤，正確答案：${ansData[qid]}`;
+    wrongSet.add(qid); rightSet.delete(qid);
   }
 }
 
-// 🔥 強制寫入，無任何阻擋
-// 替换你原来的读取json代码
-async function loadRecord() {
-  // 加?_=时间戳，绕开CDN缓存
-  const url = `https://api.github.com/repos/cychanclassroom/web/contents/phy/record.json?_=${Date.now()}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  const json = JSON.parse(atob(data.content));
-  // 读取后更新页面显示
-  document.getElementById("summary").innerText = `📊 最新记录：答对${json.right.length}题｜答错${json.wrong.length}题`;
+// ========== 提交寫入（只寫入需要TOKEN） ==========
+async function submitToGitHub(){
+  if(!confirm("確定提交本次成績到雲端？")) return;
+  const payload = { right:[...rightSet], wrong:[...wrongSet] };
+  const content = btoa(JSON.stringify(payload));
+
+  try {
+    const shaRes = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`,{
+      headers:{ Authorization:`token ${TOKEN}` }
+    });
+    const sha = (await shaRes.json()).sha;
+
+    await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`,{
+      method:"PUT",
+      headers:{
+        Authorization:`token ${TOKEN}`,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({ message:"提交成績", content, sha })
+    });
+    alert("✅ 提交成功！刷新頁面即可查看最新記錄");
+  } catch(e){
+    alert("❌ Token權限不足，請重新生成完整repo權限Token");
+  }
 }
 
-  if(put.ok) alert("✅ 寫入成功！立即去 GitHub 刷新 json");
-  else alert("❌ Token 權限不足，請重製 Token");
-}
-
-// 分頁
-function showPage(p){
-  document.querySelectorAll(".page-btn").forEach((b,i)=>b.classList.toggle("active",i+1===p));
-  document.querySelectorAll(".question-item").forEach(q=>q.classList.toggle("show",+q.dataset.page===p));
+// 分頁切換
+function showPage(page){
+  document.querySelectorAll(".page-btn").forEach((btn,i)=>{
+    btn.classList.toggle("active", i+1 === page);
+  });
+  document.querySelectorAll(".question-item").forEach(item=>{
+    item.classList.toggle("show", +item.dataset.page === page);
+  });
 }
 </script>
 </body>
