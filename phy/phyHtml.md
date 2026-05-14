@@ -18,3 +18,8 @@ https://cychanclassroom.github.io/pdf/phy/DSEPHY_TE_102.pdf
 https://cychanclassroom.github.io/pdf/phy/DSEPHY_TE_103.pdf
 https://cychanclassroom.github.io/pdf/phy/DSEPHY_TE_104.pdf
 https://cychanclassroom.github.io/pdf/phy/DSEPHY_TE_105.pdf
+
+
+
+/#white
+https://cychanclassroom.github.io/web/phy/excalidraw.html
