@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>物理 Chapter 1 MC 1–20題｜零錯誤版</title>
+<title>物理 Chapter 1 MC 1–20題｜重開重置版</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
 body{background:#f5f7fa;padding:20px}
-.title{text-align:center;font-size:26px;margin-bottom:20px;color:#222}
+.title{text-align:center;font-size:26px;margin-bottom:12px;color:#222}
+.summary{text-align:center;font-size:18px;margin-bottom:20px;color:#222;background:#e3f2fd;padding:12px;border-radius:8px}
 .page-nav{text-align:center;margin-bottom:24px}
 .page-btn{padding:10px 16px;margin:0 4px;border:none;border-radius:6px;background:#cce7ff;cursor:pointer}
 .page-btn.active{background:#66b3ff;color:#fff}
@@ -29,7 +30,9 @@ body{background:#f5f7fa;padding:20px}
 </style>
 </head>
 <body>
-<div class="title">Book 1 第1課 物理溫度與溫度計 選擇題 1–20題<br>按鈕提交同步版</div>
+
+<div class="title">Book 1 第1課 物理溫度與溫度計 選擇題 1–20題</div>
+<div class="summary" id="summary">載入歷史記錄中...</div>
 
 <div class="page-nav">
 <button class="page-btn active" onclick="showPage(1)">1–10題</button>
@@ -198,7 +201,6 @@ body{background:#f5f7fa;padding:20px}
 <div class="stat" id="s20"></div>
 </div>
 
-<!-- ===================== 提交同步按鈕 ===================== -->
 <div class="sync-bar">
   <button class="sync-btn" onclick="submitToGitHub()">✅ 提交並同步答題記錄到 GitHub</button>
 </div>
@@ -234,13 +236,47 @@ const ansData = {
 20:{ans:"D",expl:"10°C~110°C 共100°C對應20cm，每cm=5°C；10cm對應50°C，從0°C起算即為50°C？修正：10°C到110°C是20cm=100°C，1cm=5°C；水銀柱比0°C高10cm → T=10 + (10/20)×100 = 60°C"}
 };
 
-let rightSet = new Set(JSON.parse(localStorage.getItem("right") || "[]"));
-let wrongSet = new Set(JSON.parse(localStorage.getItem("wrong") || "[]"));
+// 🔥 關鍵：每次打開都重置本地作答狀態，但保留雲端記錄
+let rightSet = new Set();
+let wrongSet = new Set();
+let cloudRight = [], cloudWrong = [];
 
-window.onload = function(){
-  renderAllStats();
-  lockAnswered();
+window.onload = async function(){
+  await loadCloudRecord();
+  showSummary();
+  resetAllQuestions(); // 每次打開全部重置可答
 };
+
+// 下載雲端記錄（只讀取，不覆蓋）
+async function loadCloudRecord(){
+  try {
+    const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`,{
+      headers:{Authorization:`token ${TOKEN}`}
+    });
+    const data = await res.json();
+    const json = JSON.parse(atob(data.content));
+    cloudRight = json.right || [];
+    cloudWrong = json.wrong || [];
+  } catch(e){}
+}
+
+// 顯示雲端統計
+function showSummary(){
+  const totalRight = cloudRight.length;
+  const totalWrong = cloudWrong.length;
+  document.getElementById("summary").innerText = 
+    `📊 歷史記錄（來自雲端）：答對 ${totalRight} 題｜答錯 ${totalWrong} 題`;
+}
+
+// 🔥 每次打開都重置所有題目（可重新作答）
+function resetAllQuestions(){
+  for(let q=1;q<=20;q++){
+    const resBox = document.getElementById(`r${q}`);
+    const btns = document.querySelector(`[data-qid="${q}"]`).querySelectorAll("button");
+    resBox.style.display = "none";
+    btns.forEach(b=>b.disabled = false);
+  }
+}
 
 // 答題（選完即鎖）
 function check(qid, choice) {
@@ -262,83 +298,46 @@ function check(qid, choice) {
     wrongSet.add(qid);
     rightSet.delete(qid);
   }
-
-  localStorage.setItem("right", JSON.stringify([...rightSet]));
-  localStorage.setItem("wrong", JSON.stringify([...wrongSet]));
-  renderOneStat(qid);
 }
 
-// 統計顯示
-function renderOneStat(qid) {
-  const s = document.getElementById(`s${qid}`);
-  const r = rightSet.has(qid) ? "✅ 曾答對" : "";
-  const w = wrongSet.has(qid) ? "❌ 曾答錯" : "";
-  s.innerText = (r + " " + w).trim() || "📝 未作答";
-}
-function renderAllStats() {
-  for (let i = 1; i <= 20; i++) renderOneStat(i);
-}
-function lockAnswered() {
-  for (let q = 1; q <= 20; q++) {
-    if (rightSet.has(q) || wrongSet.has(q)) {
-      document.querySelector(`[data-qid="${q}"]`).querySelectorAll("button").forEach(b => b.disabled = true);
-    }
-  }
-}
-
-// ===================== 【核心】提交按鈕 100% 上傳 =====================
+// ===================== 提交同步 =====================
 async function submitToGitHub() {
-  if (!confirm("確定要提交並同步答題記錄到 GitHub？")) return;
+  if (!confirm("確定要提交本次答題並覆蓋雲端記錄？")) return;
 
-  // 只在 github.io 運行，本地模式自動跳過
-  if (!window.location.hostname.includes("github.io")) {
-    alert("⚠️ 本地模式 CORS 限制，請用 GitHub Pages 網址打開！");
-    return;
-  }
-
-  const payload = { right: [...rightSet], wrong: [...wrongSet] };
+  const payload = { right:[...rightSet], wrong:[...wrongSet] };
   const content = btoa(JSON.stringify(payload));
 
   try {
-    // 拿 sha
-    const resSha = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`, {
-      headers: { Authorization: `token ${TOKEN}` }
+    const resSha = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`,{
+      headers:{Authorization:`token ${TOKEN}`}
     });
-    const dataSha = await resSha.json();
-    const sha = dataSha.sha;
+    const sha = (await resSha.json()).sha;
 
-    // 上傳
-    const resUpload = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `token ${TOKEN}`,
-        "Content-Type": "application/json"
+    await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`,{
+      method:"PUT",
+      headers:{
+        Authorization:`token ${TOKEN}`,
+        "Content-Type":"application/json"
       },
-      body: JSON.stringify({
-        message: "學生提交答題記錄",
-        content: content,
-        sha: sha
+      body:JSON.stringify({
+        message:"提交本次答題",
+        content:content,
+        sha:sha
       })
     });
-
-    if (resUpload.ok) {
-      alert("✅ 提交成功！記錄已同步到 GitHub！");
-    } else {
-      alert("❌ 同步失敗，請檢查 Token 或網絡");
-    }
-  } catch (err) {
-    alert("❌ 同步失敗，請確保 Token 有效且有 repo 權限");
-    console.log(err);
+    alert("✅ 提交成功！下次打開會顯示最新統計");
+  } catch(e){
+    alert("❌ 提交失敗");
   }
 }
 
 // 分頁
 function showPage(page) {
-  document.querySelectorAll('.page-btn').forEach((btn, i) => {
-    btn.classList.toggle('active', i + 1 === page);
+  document.querySelectorAll('.page-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active',i+1===page);
   });
-  document.querySelectorAll('.question-item').forEach(item => {
-    item.classList.toggle('show', +item.dataset.page === page);
+  document.querySelectorAll('.question-item').forEach(item=>{
+    item.classList.toggle('show',+item.dataset.page===page);
   });
 }
 </script>
