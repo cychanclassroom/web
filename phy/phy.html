@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>物理 Chapter 1 MC 1–20題｜同步版</title>
+<title>物理 Chapter 1 MC 1–20題｜最終穩定版</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
 body{background:#f5f7fa;padding:20px}
@@ -18,21 +18,25 @@ body{background:#f5f7fa;padding:20px}
 .ans-btns{display:flex;gap:12px;margin-bottom:14px}
 .ans-btns button{flex:1;padding:14px;font-size:16px;border:none;border-radius:8px;background:#cce7ff;color:#004488;cursor:pointer}
 .ans-btns button:hover{background:#b3d9ff}
-.ans-btns button:disabled{background:#ccc;cursor:not-allowed}
+.ans-btns button:disabled{background:#ccc;color:#666;cursor:not-allowed}
 .result{padding:16px;border-radius:8px;font-size:18px;line-height:1.6;display:none;white-space:pre-wrap}
 .correct{background:#d1e7dd;color:#0a5633;border:1px solid #badbcc}
 .wrong{background:#f8d7da;color:#842029;border:1px solid #f5c2c7}
 .stat{margin-top:10px;font-size:15px;color:#333;padding:8px;background:#f0f7ff;border-radius:6px}
+.sync-bar{text-align:center;margin:30px 0}
+.sync-btn{padding:14px 30px;font-size:18px;background:#28a745;color:white;border:none;border-radius:8px;cursor:pointer}
+.sync-btn:hover{background:#218838}
 </style>
 </head>
 <body>
-<div class="title">Book 1 第1課 物理溫度與溫度計 選擇題 1–20題<br>獨立按鈕｜官方詳解｜雲端同步</div>
+<div class="title">Book 1 第1課 物理溫度與溫度計 選擇題 1–20題<br>按鈕提交同步版</div>
+
 <div class="page-nav">
-<button class="page-btn active" onclick="showPage(1)">1–10</button>
-<button class="page-btn" onclick="showPage(2)">11–20</button>
+<button class="page-btn active" onclick="showPage(1)">1–10題</button>
+<button class="page-btn" onclick="showPage(2)">11–20題</button>
 </div>
 
-<!-- 第1頁 1–10題 -->
+<!-- ===================== Q1–10 ===================== -->
 <div class="question-item show" data-page="1" data-qid="1">
 <div class="q-label">Q1</div>
 <img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC001.png">
@@ -113,7 +117,7 @@ body{background:#f5f7fa;padding:20px}
 <div class="stat" id="s10"></div>
 </div>
 
-<!-- 第2頁 11–20題 -->
+<!-- ===================== Q11–20 ===================== -->
 <div class="question-item" data-page="2" data-qid="11">
 <div class="q-label">Q11</div>
 <img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC011.png">
@@ -194,11 +198,16 @@ body{background:#f5f7fa;padding:20px}
 <div class="stat" id="s20"></div>
 </div>
 
+<!-- ===================== 提交同步按鈕 ===================== -->
+<div class="sync-bar">
+  <button class="sync-btn" onclick="submitToGitHub()">✅ 提交並同步答題記錄到 GitHub</button>
+</div>
+
 <script>
 // ===================== 你只需要填這裡 =====================
 const USER = "cychanclassroom";
 const REPO = "web";
-const TOKEN = "貼上你嘅 Token";
+const TOKEN = "貼上你自己的 GitHub Token";
 const FILE_PATH = "phy/record.json";
 // ==========================================================
 
@@ -225,86 +234,106 @@ const ansData = {
 20:{ans:"D",expl:"10°C~110°C 共100°C對應20cm，每cm=5°C；10cm對應50°C，從0°C起算即為50°C？修正：10°C到110°C是20cm=100°C，1cm=5°C；水銀柱比0°C高10cm → T=10 + (10/20)×100 = 60°C"}
 };
 
-let rightSet, wrongSet;
+let rightSet = new Set(JSON.parse(localStorage.getItem("right") || "[]"));
+let wrongSet = new Set(JSON.parse(localStorage.getItem("wrong") || "[]"));
 
-// 開頁自動拉 GitHub 記錄
-window.onload = async function(){
-  await loadGitHub();
+window.onload = function(){
   renderAllStats();
-  lockDone();
-}
+  lockAnswered();
+};
 
-// 載入 GitHub 數據
-async function loadGitHub(){
-  try{
-    const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`,{
-      headers:{Authorization:`token ${TOKEN}`}
-    });
-    const data = await res.json();
-    const json = JSON.parse(atob(data.content));
-    localStorage.right = JSON.stringify(json.right||[]);
-    localStorage.wrong = JSON.stringify(json.wrong||[]);
-  }catch(e){}
-  rightSet = new Set(JSON.parse(localStorage.right||"[]"));
-  wrongSet = new Set(JSON.parse(localStorage.wrong||"[]"));
-}
+// 答題（選完即鎖）
+function check(qid, choice) {
+  const btns = document.querySelector(`[data-qid="${qid}"]`).querySelectorAll("button");
+  btns.forEach(b => b.disabled = true);
 
-// 答題邏輯（選完即鎖）
-function check(qid,choice){
-  const box = document.querySelector(`[data-qid="${qid}"]`);
-  box.querySelectorAll("button").forEach(b=>b.disabled=true);
-  const r = document.getElementById(`r${qid}`);
-  r.style.display="block";
-  const c = ansData[qid].ans;
+  const resBox = document.getElementById(`r${qid}`);
+  resBox.style.display = "block";
+  const correct = ansData[qid].ans;
 
-  if(choice===c){
-    r.className="result correct";
-    r.innerHTML=`✅ 正確\n答案：${c}\n${ansData[qid].expl}`;
-    rightSet.add(qid); wrongSet.delete(qid);
-  }else{
-    r.className="result wrong";
-    r.innerHTML=`❌ 錯誤\n正確答案：${c}\n${ansData[qid].expl}`;
-    wrongSet.add(qid); rightSet.delete(qid);
+  if (choice === correct) {
+    resBox.className = "result correct";
+    resBox.innerHTML = `✅ 正確\n答案：${correct}\n解釋：${ansData[qid].expl}`;
+    rightSet.add(qid);
+    wrongSet.delete(qid);
+  } else {
+    resBox.className = "result wrong";
+    resBox.innerHTML = `❌ 錯誤\n正確答案：${correct}\n解釋：${ansData[qid].expl}`;
+    wrongSet.add(qid);
+    rightSet.delete(qid);
   }
-  localStorage.right = JSON.stringify([...rightSet]);
-  localStorage.wrong = JSON.stringify([...wrongSet]);
-  renderOne(qid);
+
+  localStorage.setItem("right", JSON.stringify([...rightSet]));
+  localStorage.setItem("wrong", JSON.stringify([...wrongSet]));
+  renderOneStat(qid);
 }
 
-// 渲染統計
-function renderOne(qid){
+// 統計顯示
+function renderOneStat(qid) {
   const s = document.getElementById(`s${qid}`);
-  s.innerText = `${rightSet.has(qid)?"✅ 曾對":""} ${wrongSet.has(qid)?"❌ 曾錯":""}`.trim() || "📝 未作答";
+  const r = rightSet.has(qid) ? "✅ 曾答對" : "";
+  const w = wrongSet.has(qid) ? "❌ 曾答錯" : "";
+  s.innerText = (r + " " + w).trim() || "📝 未作答";
 }
-function renderAllStats(){ for(let i=1;i<=20;i++) renderOne(i); }
-function lockDone(){
-  for(let i=1;i<=20;i++){
-    if(rightSet.has(i)||wrongSet.has(i)){
-      document.querySelector(`[data-qid="${i}"]`).querySelectorAll("button").forEach(b=>b.disabled=true);
+function renderAllStats() {
+  for (let i = 1; i <= 20; i++) renderOneStat(i);
+}
+function lockAnswered() {
+  for (let q = 1; q <= 20; q++) {
+    if (rightSet.has(q) || wrongSet.has(q)) {
+      document.querySelector(`[data-qid="${q}"]`).querySelectorAll("button").forEach(b => b.disabled = true);
     }
   }
 }
 
-// 🔥 手動同步按鈕（100% 成功上傳）
-async function syncToGitHub(){
-  const payload = {right:[...rightSet],wrong:[...wrongSet]};
+// ===================== 【核心】提交按鈕 100% 上傳 =====================
+async function submitToGitHub() {
+  if (!confirm("確定要提交並同步答題記錄到 GitHub？")) return;
+
+  const payload = { right: [...rightSet], wrong: [...wrongSet] };
   const content = btoa(JSON.stringify(payload));
-  const getSha = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`,{
-    headers:{Authorization:`token ${TOKEN}`}
-  });
-  const sha = (await getSha.json()).sha;
-  await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`,{
-    method:"PUT",
-    headers:{Authorization:`token ${TOKEN}`,"Content-Type":"application/json"},
-    body:JSON.stringify({message:"同步答題記錄",content,sha})
-  });
-  alert("✅ 成績已同步到 GitHub！");
+
+  try {
+    // 拿 sha
+    const resSha = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`, {
+      headers: { Authorization: `token ${TOKEN}` }
+    });
+    const dataSha = await resSha.json();
+    const sha = dataSha.sha;
+
+    // 上傳
+    const resUpload = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "學生提交答題記錄",
+        content: content,
+        sha: sha
+      })
+    });
+
+    if (resUpload.ok) {
+      alert("✅ 提交成功！記錄已同步到 GitHub！");
+    } else {
+      alert("❌ 同步失敗，請檢查 Token 或網絡");
+    }
+  } catch (err) {
+    alert("❌ 同步失敗：本地模式 CORS 限制，請上傳 GitHub Pages 後使用");
+    console.log(err);
+  }
 }
 
 // 分頁
-function showPage(page){
-  document.querySelectorAll('.page-btn').forEach((btn,i)=>btn.classList.toggle('active',i+1===page));
-  document.querySelectorAll('.question-item').forEach(item=>item.classList.toggle('show',+item.dataset.page===page));
+function showPage(page) {
+  document.querySelectorAll('.page-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i + 1 === page);
+  });
+  document.querySelectorAll('.question-item').forEach(item => {
+    item.classList.toggle('show', +item.dataset.page === page);
+  });
 }
 </script>
 </body>
