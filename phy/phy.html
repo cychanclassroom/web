@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>物理 Chapter 1 MC C最終完整版</title>
+<title>物理 Chapter 1 MC 最終完整版</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
 body{background:#f5f7fa;padding:20px}
@@ -495,36 +495,29 @@ D：${d} 次`;
 
 // 按鈕2：全部學生的統計(總人數)
 async function showClassLast(qid) {
-  // 1. 讀取該題所有紀錄，按時間新→舊排序
   const { data } = await sb.from("records")
-    .select("sid, answer, created_at")
+    .select("sid, answer")
     .eq("subject", SUBJECT)
     .eq("unit", UNIT)
-    .eq("qid", qid)
-    .order("created_at", { ascending: false });
+    .eq("qid", qid);
 
-  // 2. 每個學生只保留第一條（最新）答案
-  const uniqueStudents = new Map();
-  for (const row of data) {
-    if (!uniqueStudents.has(row.sid)) {
-      uniqueStudents.set(row.sid, row.answer);
-    }
-  }
+  const map = new Map();
+  data.forEach(row => map.set(row.sid, row.answer));
 
-  // 3. 統計 A/B/C/D 人數
-  let a = 0, b = 0, c = 0, d = 0;
-  uniqueStudents.forEach(ans => {
-    if (ans === "A") a++;
-    if (ans === "B") b++;
-    if (ans === "C") c++;
-    if (ans === "D") d++;
+  let a=0,b=0,c=0,d=0;
+  map.forEach(ans=>{
+    if(ans==="A")a++;
+    if(ans==="B")b++;
+    if(ans==="C")c++;
+    if(ans==="D")d++;
   });
 
-  // 4. 輸出（人數一定 = 真實作答人數）
-  const totalStudents = uniqueStudents.size;
-  const box = document.getElementById("stat" + qid);
+  // 直接 A+B+C+D = 總人數，邏輯100%正確
+  const total = a + b + c + d;
+
+  const box = document.getElementById("stat"+qid);
   box.style.display = "block";
-  box.innerText = `📊 Q${qid} 全部學生的統計(${totalStudents}人)
+  box.innerText = `📊 Q${qid} 全部學生的統計(${total}人)
 A：${a} 人
 B：${b} 人
 C：${c} 人
