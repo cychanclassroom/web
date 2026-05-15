@@ -3,90 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>第一課｜雙按鈕統計最終修復版</title>
+<title>第一課｜最終修正版｜有提交鈕</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
 body{background:#f5f7fa;padding:20px}
 
-/* 登入 */
 .login-box{max-width:400px;margin:60px auto;background:white;padding:30px;border-radius:16px;box-shadow:0 4px 16px #0001}
-.login-box h2{text-align:center;margin-bottom:20px}
-.login-box input{width:100%;padding:12px 14px;margin:8px 0;border:1px solid #ddd;border-radius:8px;font-size:16px}
-.login-box button{width:100%;padding:14px;background:#28a745;color:white;border:none;border-radius:8px;font-size:16px;margin-top:10px;cursor:pointer}
+.login-box input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px}
+.login-box button{width:100%;padding:14px;background:#28a745;color:white;border:none;border-radius:8px;margin-top:10px}
 
 .main-system{display:none}
-.user-info{text-align:center;font-size:16px;margin:10px 0;color:#333}
-.title{text-align:center;font-size:24px;margin:20px 0}
-
-/* 分頁 */
-.page-nav{text-align:center;margin-bottom:20px}
-.page-btn{padding:10px 16px;margin:0 4px;border:none;border-radius:6px;background:#cce7ff;cursor:pointer}
-.page-btn.active{background:#66b3ff;color:#fff}
-
-/* 題目 */
-.question-item{background:white;border-radius:12px;padding:22px;margin:0 auto 22px auto;max-width:920px;display:none}
+.user-info{text-align:center;margin:10px 0}
+.question-item{background:white;border-radius:12px;padding:22px;margin:0 auto 22px;max-width:920px;display:none}
 .question-item.show{display:block}
 .q-label{font-size:20px;font-weight:bold;margin-bottom:12px}
-.question-item img{max-width:100%;height:auto;border-radius:8px;margin-bottom:18px}
-.ans-btns{display:flex;gap:12px;margin-bottom:14px}
-.ans-btns button{flex:1;padding:14px;font-size:16px;border:none;border-radius:8px;background:#cce7ff;cursor:pointer}
-.ans-btns button:disabled{background:#ccc;color:#666}
+.ans-btns{display:flex;gap:12px;margin:10px 0}
+.ans-btns button{flex:1;padding:14px;border:none;border-radius:8px;background:#cce7ff;cursor:pointer}
+.ans-btns button.selected{background:#007bff;color:white}
+.ans-btns button:disabled{background:#ccc}
 
-.result{padding:16px;border-radius:8px;margin:10px 0;display:none;white-space:pre-wrap}
+/* 提交鈕 */
+.submit-btn{width:100%;padding:14px;background:#28a745;color:white;border:none;border-radius:8px;margin:10px 0;cursor:pointer}
+.submit-btn:disabled{background:#ccc}
+
+/* 結果 */
+.result{padding:16px;border-radius:8px;margin:10px 0;display:none}
 .correct{background:#d1f0e3;color:#0a5633}
 .wrong{background:#ffe1e3;color:#842029}
 
-/* 統計按鈕：預設隱藏！！提交後先出現 */
-.stat-row{display:none;gap:10px;margin:12px 0}
+/* 統計按鈕（預設隱藏） */
+.stat-row{display:none;gap:10px;margin:10px 0}
 .stat-row.show{display:flex}
 .stat-row button{flex:1;padding:12px;border:none;border-radius:8px;color:white;cursor:pointer}
 .btn-me{background:#4285f4}
 .btn-class{background:#ff9800}
 
-/* 統計面板 */
 .stat-box{background:#f8f9fa;padding:14px;border-radius:8px;margin-top:10px;display:none;white-space:pre-wrap}
 </style>
 </head>
 
 <body>
 
-<!-- 登入畫面 -->
+<!-- 登入 -->
 <div class="login-box" id="loginBox">
   <h2>學生登入</h2>
-  <input id="sid" placeholder="學號 (s001)">
-  <input id="spw" type="password" placeholder="密碼">
+  <input id="sid" placeholder="學號 s001">
+  <input id="spw" type="password" placeholder="密碼 1234">
   <button onclick="login()">登入</button>
 </div>
 
 <!-- 主系統 -->
 <div class="main-system" id="mainSystem">
   <div class="user-info" id="userInfo"></div>
-  <div class="title">Book 1 第一課｜溫度與溫度計</div>
 
-  <div class="page-nav">
-    <button class="page-btn active" onclick="showPage(1)">1–10</button>
-    <button class="page-btn" onclick="showPage(2)">11–20</button>
-  </div>
-
-  <!-- Q1 示範 -->
-  <div class="question-item show" data-page="1" data-qid="1">
+  <!-- Q1 -->
+  <div class="question-item show" data-qid="1">
     <div class="q-label">Q1</div>
     <img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC001.png">
+    
     <div class="ans-btns">
-      <button onclick="check(1,'A')">A</button>
-      <button onclick="check(1,'B')">B</button>
-      <button onclick="check(1,'C')">C</button>
-      <button onclick="check(1,'D')">D</button>
+      <button onclick="select(1,'A')">A</button>
+      <button onclick="select(1,'B')">B</button>
+      <button onclick="select(1,'C')">C</button>
+      <button onclick="select(1,'D')">D</button>
     </div>
+
+    <button class="submit-btn" id="submit1" onclick="submitAns(1)" disabled>提交答案</button>
     <div class="result" id="r1"></div>
 
-    <!-- 統計按鈕（預設隱藏） -->
     <div class="stat-row" id="btnRow1">
-      <button class="btn-me" onclick="showMyAnsCount(1)">📝 我本題歷史答案統計</button>
-      <button class="btn-class" onclick="showClassLastAns(1)">📊 全班最後一次答案統計</button>
+      <button class="btn-me" onclick="showMyAnsCount(1)">📝 我本題答案統計</button>
+      <button class="btn-class" onclick="showClassLastAns(1)">📊 全班最後一次答案</button>
     </div>
 
-    <!-- 統計面板 -->
     <div class="stat-box" id="stat1"></div>
   </div>
 
@@ -94,152 +83,117 @@ body{background:#f5f7fa;padding:20px}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ===================== 你只填這兩個 =====================
+// ===================== 你必填 =====================
 const SUPABASE_URL = "https://vonnkewineorstjpmunt.supabase.co";
 const SUPABASE_KEY = "sb_publishable_QHFJjW60y4g5-s-FhLElTw_VXJMTD7a";
-// ======================================================
+// ==================================================
 
 const SUBJECT = "phy";
 const UNIT = 1;
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentSid = "";
+let selected = {}; // 儲存選擇
 
-// 答案
 const ansData = {
-1:{ans:"B",expl:"攝氏溫標高定點100°C"},
-2:{ans:"C",expl:"液體受熱膨脹"},
-3:{ans:"A",expl:"華氏和開氏溫標"},
-4:{ans:"D",expl:"乾冰溫度最低"},
-5:{ans:"D",expl:"體積大膨脹多"},
-6:{ans:"B",expl:"高於120°C"},
-7:{ans:"B",expl:"溫和變化細"},
-8:{ans:"B",expl:"質量不會變"},
-9:{ans:"D",expl:"紅外線溫度計"},
-10:{ans:"C",expl:"線性關係"},
-11:{ans:"C",expl:"55°C"},
-12:{ans:"A",expl:"管幼更靈敏"},
-13:{ans:"B",expl:"低定點0°C"},
-14:{ans:"D",expl:"62.5°C"},
-15:{ans:"D",expl:"水銀可量高溫"},
-16:{ans:"A",expl:"冰點0°C"},
-17:{ans:"B",expl:"溫差少於5°C"},
-18:{ans:"A",expl:"溫度表示冷熱"},
-19:{ans:"B",expl:"線性對應"},
-20:{ans:"D",expl:"60°C"}
+1:{ans:"B",expl:"攝氏溫標高定點100°C"}
 };
 
 // 登入
-async function login() {
-  const sid = document.getElementById("sid").value.trim();
-  const pw = document.getElementById("spw").value.trim();
-  const { data, error } = await sb.from("students")
-    .select("id,name")
-    .eq("id", sid)
-    .eq("pw", pw)
-    .single();
-
-  if (error || !data) { alert("學號或密碼錯誤"); return; }
+async function login(){
+  const sid = document.getElementById("sid").value;
+  const pw = document.getElementById("spw").value;
+  const {data} = await sb.from("students").select("id,name").eq("id",sid).eq("pw",pw).single();
+  if(!data){alert("學號或密碼錯誤");return}
   currentSid = data.id;
-  loginBox.style.display = "none";
-  mainSystem.style.display = "block";
-  userInfo.innerText = "學生：" + data.name;
+  loginBox.style.display="none";
+  mainSystem.style.display="block";
+  userInfo.innerText = "學生："+data.name;
 }
 
-// 答題提交
-async function check(qid, sel) {
-  if (!currentSid) { alert("請先登入"); return; }
+// 選擇答案
+function select(qid, ans){
+  selected[qid] = ans;
+  document.getElementById("submit"+qid).disabled = false;
 
-  const correct = sel === ansData[qid].ans;
-  const res = document.getElementById("r"+qid);
-  res.style.display = "block";
-  res.className = correct ? "result correct" : "result wrong";
-  res.innerText = correct ? "✅ 正確\n" + ansData[qid].expl : "❌ 錯誤\n正確："+ansData[qid].ans+"\n"+ansData[qid].expl;
+  document.querySelectorAll(`[data-qid="${qid}"] .ans-btns button`).forEach(b=>b.classList.remove("selected"));
+  event.target.classList.add("selected");
+}
 
-  // 存入資料庫
+// ✅ 提交答案（真正寫入資料庫）
+async function submitAns(qid){
+  if(!selected[qid]){alert("請先選擇答案");return}
+
+  const correct = selected[qid] === ansData[qid].ans;
+
+  // ✅ 寫入資料庫
   await sb.from("records").insert([{
     sid: currentSid,
     subject: SUBJECT,
     unit: UNIT,
     qid: qid,
-    answer: sel,
+    answer: selected[qid],
     correct: correct
   }]);
 
-  // 禁用選項按鈕
-  document.querySelectorAll(`[data-qid="${qid}"] button`).forEach(b=>b.disabled=true);
+  // 顯示對錯
+  const res = document.getElementById("r"+qid);
+  res.style.display = "block";
+  res.className = correct ? "result correct" : "result wrong";
+  res.innerText = correct ? "✅ 正確" : "❌ 錯誤\n正確："+ansData[qid].ans;
 
-  // ✅ 關鍵：提交答案後，**顯示統計按鈕**
+  // 鎖定按鈕
+  document.getElementById("submit"+qid).disabled = true;
+  document.querySelectorAll(`[data-qid="${qid}"] .ans-btns button`).forEach(b=>b.disabled=true);
+
+  // ✅ 顯示統計按鈕
   document.getElementById("btnRow"+qid).classList.add("show");
 }
 
-// 按鈕1：我本題歷史答案統計（A/B/C/D次數）
-async function showMyAnsCount(qid) {
-  const { data, error } = await sb.from("records")
+// 按鈕1：我本題A/B/C/D次數
+async function showMyAnsCount(qid){
+  const {data} = await sb.from("records")
     .select("answer")
-    .eq("sid", currentSid)
-    .eq("subject", SUBJECT)
-    .eq("unit", UNIT)
-    .eq("qid", qid);
-
-  if (error) { alert("讀取失敗"); return; }
+    .eq("sid",currentSid)
+    .eq("subject",SUBJECT)
+    .eq("unit",UNIT)
+    .eq("qid",qid);
 
   let a=0,b=0,c=0,d=0;
   data.forEach(x=>{
-    if(x.answer==="A")a++;
-    if(x.answer==="B")b++;
-    if(x.answer==="C")c++;
-    if(x.answer==="D")d++;
+    if(x.answer=="A")a++;
+    if(x.answer=="B")b++;
+    if(x.answer=="C")c++;
+    if(x.answer=="D")d++;
   });
 
-  const txt = `📝 Q${qid} 你本題所有歷史答案統計：
-A：${a} 次
-B：${b} 次
-C：${c} 次
-D：${d} 次`;
-
   const box = document.getElementById("stat"+qid);
-  box.style.display = "block";
-  box.innerText = txt;
+  box.style.display="block";
+  box.innerText = `📝 你Q${qid} 歷史統計：\nA：${a}次 B：${b}次 C：${c}次 D：${d}次`;
 }
 
-// 按鈕2：全班最後一次答案統計
-async function showClassLastAns(qid) {
-  const { data, error } = await sb.from("records")
-    .select("sid, answer")
-    .eq("subject", SUBJECT)
-    .eq("unit", UNIT)
-    .eq("qid", qid);
+// 按鈕2：全班最後一次
+async function showClassLastAns(qid){
+  const {data} = await sb.from("records")
+    .select("sid,answer")
+    .eq("subject",SUBJECT)
+    .eq("unit",UNIT)
+    .eq("qid",qid);
 
-  if (error) { alert("讀取失敗"); return; }
-
-  // 每個學生只保留最後一次答案
   const map = new Map();
   data.forEach(row=>map.set(row.sid, row.answer));
 
   let a=0,b=0,c=0,d=0;
   map.forEach(ans=>{
-    if(ans==="A")a++;
-    if(ans==="B")b++;
-    if(ans==="C")c++;
-    if(ans==="D")d++;
+    if(ans=="A")a++;
+    if(ans=="B")b++;
+    if(ans=="C")c++;
+    if(ans=="D")d++;
   });
 
-  const txt = `📊 Q${qid} 全班最後一次答案統計（每人只計最後一次）
-A：${a} 人
-B：${b} 人
-C：${c} 人
-D：${d} 人`;
-
   const box = document.getElementById("stat"+qid);
-  box.style.display = "block";
-  box.innerText = txt;
-}
-
-// 分頁
-function showPage(p) {
-  document.querySelectorAll(".page-btn").forEach((btn,i)=>btn.classList.toggle("active",i+1===p));
-  document.querySelectorAll(".question-item").forEach(item=>item.classList.toggle("show",+item.dataset.page===p));
+  box.style.display="block";
+  box.innerText = `📊 Q${qid} 全班最後一次答案：\nA：${a}人 B：${b}人 C：${c}人 D：${d}人`;
 }
 </script>
 </body>
