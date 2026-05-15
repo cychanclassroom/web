@@ -406,7 +406,8 @@ async function login() {
   currentSid = data.id;
   loginBox.style.display = "none";
   mainSystem.style.display = "block";
-  userInfo.innerText = "學生："+data.name;
+  // 學生名稱 (SID)
+  userInfo.innerText = `學生：${data.name} (${data.id})`;
   loadMyAllHistory();
 }
 
