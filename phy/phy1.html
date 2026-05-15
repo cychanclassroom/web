@@ -2,122 +2,187 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>DSE 練習系統</title>
+<title>Physics Chapter 1 Practice</title>
 <style>
-body{font-family:Arial;margin:20px;background:#f7f9fc;}
-.question{background:white;padding:15px;margin:10px 0;border-radius:8px;box-shadow:0 1px 3px #ccc;}
-.ans-btn{padding:8px 14px;margin:4px;border:none;border-radius:4px;background:#4285f4;color:white;cursor:pointer;}
-#submitAll{padding:10px 20px;background:#0f9d58;color:white;border:none;border-radius:6px;font-size:16px;cursor:pointer;margin:20px 0;}
-.stat-btn{padding:6px 12px;background:#9c27b0;color:white;border:none;border-radius:4px;margin-top:8px;display:none;}
-.history-info{color:#555;margin-top:6px;font-size:14px;}
+body {
+    font-family: Arial, sans-serif;
+    margin: 24px;
+    background-color: #f7f9fc;
+}
+.question-block {
+    background: #ffffff;
+    padding: 18px;
+    margin: 12px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+.option-btn {
+    padding: 9px 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background: #3478f6;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+#submitAllBtn {
+    padding: 12px 24px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 17px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.stat-button {
+    padding: 7px 14px;
+    margin-top: 10px;
+    background: #8e44ad;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    display: none; /* 預設隱藏統計按鈕 */
+}
+.history-record {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #444;
+}
 </style>
 </head>
 <body>
 
-<h2>經濟練習</h2>
-<div id="questionsContainer"></div>
-<button id="submitAll">提交所有答案</button>
+<h2>Physics Book 1 Chapter 1 Exercise</h2>
+<div id="questionList"></div>
+<button id="submitAllBtn">提交所有答案</button>
 
 <script>
-// Supabase 配置
+// ========= 你只需要改這兩行 =========
 const SUPABASE_URL = "https://vonnkewineorstjpmunt.supabase.co";
-const SUPABASE_KEY = "sb_publishable_QHFJjW60y4g5-s-FhLElTw_VXJMTD7a";
-const sid = "4B01"; // 學生編號
-const subject = "econ";
+const SUPABASE_API_KEY = "sb_publishable_QHFJjW60y4g5-s-FhLElTw_VXJMTD7a";
+// ====================================
+
+// 固定參數：phy book 1 chapter 1
+const subject = "phy";
 const book_no = 1;
 const chapter_no = 1;
 const q_type = "mc";
+const student_sid = "4B01"; // 可改學生編號
 
-let questions = [];
-let userAnswers = {};
+let allQuestions = [];
+let userSelectedAnswers = {};
 
-// 載入題目
-async function loadQuestions() {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/questions?subject=eq.${subject}&book_no=eq.${book_no}&chapter_no=eq.${chapter_no}&q_type=eq.${q_type}`,{
-    headers: {apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}
-  });
-  questions = await res.json();
-  renderQuestions();
+// 載入 phy book1 chapter1 所有題目
+async function loadAllQuestions() {
+    const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/questions?subject=eq.${subject}&book_no=eq.${book_no}&chapter_no=eq.${chapter_no}&q_type=eq.${q_type}`,
+        {
+            headers: {
+                apikey: SUPABASE_API_KEY,
+                Authorization: `Bearer ${SUPABASE_API_KEY}`
+            }
+        }
+    );
+    allQuestions = await response.json();
+    renderQuestionPage();
 }
 
-// 渲染題目（一開始隱藏統計按鈕）
-async function renderQuestions() {
-  const container = document.getElementById("questionsContainer");
-  container.innerHTML = "";
+// 獲取該學生每題歷史答題次數
+async function getStudentHistoryData() {
+    const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/records?sid=eq.${student_sid}&subject=eq.${subject}&book_no=eq.${book_no}&chapter_no=eq.${chapter_no}`,
+        {
+            headers: {
+                apikey: SUPABASE_API_KEY,
+                Authorization: `Bearer ${SUPABASE_API_KEY}`
+            }
+        }
+    );
+    const records = await res.json();
+    let history = {};
 
-  // 預先載入歷史紀錄
-  const history = await getStudentHistory();
-
-  questions.forEach(q => {
-    const div = document.createElement("div");
-    div.className = "question";
-    div.innerHTML = `
-      <p><strong>${q.q_num}. ${q.content}</strong></p>
-      <button class="ans-btn" onclick="setAnswer(${q.q_num},'A')">A</button>
-      <button class="ans-btn" onclick="setAnswer(${q.q_num},'B')">B</button>
-      <button class="ans-btn" onclick="setAnswer(${q.q_num},'C')">C</button>
-      <button class="ans-btn" onclick="setAnswer(${q.q_num},'D')">D</button>
-      <div class="history-info">
-        歷史紀錄：答對 ${history[q.q_num]?.correct||0} 次 / 答錯 ${history[q.q_num]?.wrong||0} 次
-      </div>
-      <button class="stat-btn" id="statBtn${q.q_num}">個人統計</button>
-      <button class="stat-btn" id="classStatBtn${q.q_num}">全班統計</button>
-    `;
-    container.appendChild(div);
-  });
-}
-
-// 取得學生歷史答題次數
-async function getStudentHistory() {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/records?sid=eq.${sid}&subject=eq.${subject}&book_no=eq.${book_no}&chapter_no=eq.${chapter_no}`,{
-    headers: {apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}
-  });
-  const records = await res.json();
-  const hist = {};
-  records.forEach(r=>{
-    if(!hist[r.q_num]) hist[r.q_num]={correct:0,wrong:0};
-    if(r.is_correct) hist[r.q_num].correct++;
-    else hist[r.q_num].wrong++;
-  });
-  return hist;
-}
-
-// 設定答案
-function setAnswer(qnum, ans) {
-  userAnswers[qnum] = ans;
-  // 揀答案期間統計按鈕保持隱藏
-}
-
-// 提交所有答案
-async function submitAll() {
-  const payload = [];
-  for(const q of questions) {
-    const ans = userAnswers[q.q_num];
-    if(!ans) continue;
-    payload.push({
-      sid,subject,book_no,chapter_no,q_type,
-      q_num: q.q_num,
-      student_ans: ans,
-      correct_ans: q.answer,
-      is_correct: ans === q.answer
+    records.forEach(item => {
+        if (!history[item.q_num]) {
+            history[item.q_num] = { correct: 0, wrong: 0 };
+        }
+        if (item.is_correct) history[item.q_num].correct++;
+        else history[item.q_num].wrong++;
     });
-  }
-
-  await fetch(`${SUPABASE_URL}/rest/v1/records`,{
-    method:"POST",
-    headers: {apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`,"Content-Type":"application/json"},
-    body: JSON.stringify(payload)
-  });
-
-  // 提交成功 → 顯示所有統計按鈕
-  document.querySelectorAll(".stat-btn").forEach(btn=>btn.style.display="inline-block");
-  
-  // 重新載入歷史次數
-  renderQuestions();
+    return history;
 }
 
-document.getElementById("submitAll").addEventListener("click",submitAll);
-loadQuestions();
+// 渲染頁面
+async function renderQuestionPage() {
+    const container = document.getElementById("questionList");
+    container.innerHTML = "";
+    const history = await getStudentHistoryData();
+
+    allQuestions.forEach(q => {
+        const div = document.createElement("div");
+        div.className = "question-block";
+        div.innerHTML = `
+            <p><strong>${q.q_num}. ${q.content}</strong></p>
+            <button class="option-btn" onclick="pickAnswer(${q.q_num},'A')">A</button>
+            <button class="option-btn" onclick="pickAnswer(${q.q_num},'B')">B</button>
+            <button class="option-btn" onclick="pickAnswer(${q.q_num},'C')">C</button>
+            <button class="option-btn" onclick="pickAnswer(${q.q_num},'D')">D</button>
+            <div class="history-record">
+                歷史記錄：答對 ${history[q.q_num]?.correct || 0} 次 / 答錯 ${history[q.q_num]?.wrong || 0} 次
+            </div>
+            <button class="stat-button" id="personalStat${q.q_num}">個人統計</button>
+            <button class="stat-button" id="classStat${q.q_num}">全班統計</button>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// 儲存答案
+function pickAnswer(qnum, ans) {
+    userSelectedAnswers[qnum] = ans;
+}
+
+// 提交答案上傳 Supabase
+async function submitAllAnswers() {
+    const payload = [];
+    allQuestions.forEach(q => {
+        const ans = userSelectedAnswers[q.q_num];
+        if (!ans) return;
+        payload.push({
+            sid: student_sid,
+            subject: subject,
+            book_no: book_no,
+            chapter_no: chapter_no,
+            q_type: q_type,
+            q_num: q.q_num,
+            student_ans: ans,
+            correct_ans: q.answer,
+            is_correct: ans === q.answer
+        });
+    });
+
+    await fetch(`${SUPABASE_URL}/rest/v1/records`, {
+        method: "POST",
+        headers: {
+            apikey: SUPABASE_API_KEY,
+            Authorization: `Bearer ${SUPABASE_API_KEY}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+
+    // 提交成功 → 顯示所有統計按鈕
+    document.querySelectorAll(".stat-button").forEach(btn => {
+        btn.style.display = "inline-block";
+    });
+
+    // 刷新歷史紀錄
+    renderQuestionPage();
+}
+
+document.getElementById("submitAllBtn").addEventListener("click", submitAllAnswers);
+loadAllQuestions();
 </script>
 </body>
 </html>
