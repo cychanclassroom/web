@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>物理 Chapter 1 MC 1–20題</title>
+<title>物理 Chapter 1 MC 1–20題｜最終完整版</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
 body{background:#f5f7fa;padding:20px}
@@ -492,7 +492,7 @@ D：${d} 次`;
 }
   
 
-// 按鈕2：全班最後一次答案
+// 按鈕2：全部學生的統計
 async function showClassLast(qid) {
   const { data } = await sb.from("records")
     .select("sid, answer")
@@ -510,7 +510,7 @@ async function showClassLast(qid) {
 
   const box = document.getElementById("stat"+qid);
   box.style.display = "block";
-  box.innerText = `📊 Q${qid} 全班最後一次答案\nA：${a} 人　B：${b} 人　C：${c} 人　D：${d} 人`;
+  box.innerText = `📊 Q${qid} 全部學生的統計\nA：${a} 人　B：${b} 人　C：${c} 人　D：${d} 人`;
 }
 
 // 分頁
