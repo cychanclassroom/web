@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>物理 MC｜可更新JSON最終版</title>
+<title>物理練習｜Supabase 穩定版</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
 body{background:#f5f7fa;padding:20px}
@@ -17,321 +16,147 @@ body{background:#f5f7fa;padding:20px}
 .q-label{font-size:20px;font-weight:bold;margin-bottom:12px;color:#222}
 .question-item img{max-width:100%;height:auto;border-radius:8px;margin-bottom:18px}
 .ans-btns{display:flex;gap:12px;margin-bottom:14px}
-.ans-btns button{flex:1;padding:14px;font-size:16px;border:none;border-radius:8px;background:#cce7ff;color:#004488;cursor:pointer}
+.ans-btns button{flex:1;padding:14px;font-size:16px;border:none;border-radius:8px;background:#cce7ff;cursor:pointer}
 .ans-btns button:hover{background:#b3d9ff}
-.ans-btns button:disabled{background:#ccc;color:#666;cursor:not-allowed}
-.result{padding:16px;border-radius:8px;font-size:18px;line-height:1.6;display:none;white-space:pre-wrap}
-.correct{background:#d1e7dd;color:#0a5633;border:1px solid #badbcc}
-.wrong{background:#f8d7da;color:#842029;border:1px solid #f5c2c7}
-.stat{margin-top:10px;font-size:15px;color:#333;padding:8px;background:#f0f7ff;border-radius:6px}
+.ans-btns button:disabled{background:#ccc}
+.result{padding:16px;border-radius:8px;font-size:18px;display:none;white-space:pre-wrap}
+.correct{background:#d1e7dd;color:#0a5633}
+.wrong{background:#f8d7da;color:#842029}
+.stat{margin-top:10px;font-size:15px;padding:8px;background:#f0f7ff;border-radius:6px}
 .sync-bar{text-align:center;margin:20px 0;display:none}
 .sync-bar.show{display:block}
 .sync-btn{padding:14px 30px;font-size:18px;background:#28a745;color:white;border:none;border-radius:8px;cursor:pointer}
-.sync-btn:hover{background:#218838}
 </style>
 </head>
 <body>
 
-<div class="title">Book 1 第1課 物理溫度與溫度計 MC</div>
+<div class="title">物理溫度與溫度計 選擇題</div>
 
 <div class="page-nav">
-<button class="page-btn active" onclick="showPage(1)">1–10題</button>
-<button class="page-btn" onclick="showPage(2)">11–20題</button>
+<button class="page-btn active" onclick="showPage(1)">1–10</button>
+<button class="page-btn" onclick="showPage(2)">11–20</button>
 </div>
 
 <!-- 1–10 題 -->
-<div class="question-item show" data-page="1" data-qid="1">
-<div class="q-label">Q1</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC001.png">
-<div class="ans-btns"><button onclick="check(1,'A')">A</button><button onclick="check(1,'B')">B</button><button onclick="check(1,'C')">C</button><button onclick="check(1,'D')">D</button></div>
-<div class="result" id="r1"></div>
-<div class="stat" id="s1">載入統計...</div>
-</div>
+<div class="question-item show" data-page="1" data-qid="1"><div class="q-label">Q1</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC001.png"><div class="ans-btns"><button onclick="check(1,'A')">A</button><button onclick="check(1,'B')">B</button><button onclick="check(1,'C')">C</button><button onclick="check(1,'D')">D</button></div><div class="result" id="r1"></div><div class="stat" id="s1">載入中...</div></div>
+<div class="question-item show" data-page="1" data-qid="2"><div class="q-label">Q2</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC002.png"><div class="ans-btns"><button onclick="check(2,'A')">A</button><button onclick="check(2,'B')">B</button><button onclick="check(2,'C')">C</button><button onclick="check(2,'D')">D</button></div><div class="result" id="r2"></div><div class="stat" id="s2">載入中...</div></div>
+<div class="question-item show" data-page="1" data-qid="3"><div class="q-label">Q3</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC003.png"><div class="ans-btns"><button onclick="check(3,'A')">A</button><button onclick="check(3,'B')">B</button><button onclick="check(3,'C')">C</button><button onclick="check(3,'D')">D</button></div><div class="result" id="r3"></div><div class="stat" id="s3">載入中...</div></div>
+<div class="question-item show" data-page="1" data-qid="4"><div class="q-label">Q4</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC004.png"><div class="ans-btns"><button onclick="check(4,'A')">A</button><button onclick="check(4,'B')">B</button><button onclick="check(4,'C')">C</button><button onclick="check(4,'D')">D</button></div><div class="result" id="r4"></div><div class="stat" id="s4">載入中...</div></div>
+<div class="question-item show" data-page="1" data-qid="5"><div class="q-label">Q5</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC005.png"><div class="ans-btns"><button onclick="check(5,'A')">A</button><button onclick="check(5,'B')">B</button><button onclick="check(5,'C')">C</button><button onclick="check(5,'D')">D</button></div><div class="result" id="r5"></div><div class="stat" id="s5">載入中...</div></div>
+<div class="question-item show" data-page="1" data-qid="6"><div class="q-label">Q6</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC006.png"><div class="ans-btns"><button onclick="check(6,'A')">A</button><button onclick="check(6,'B')">B</button><button onclick="check(6,'C')">C</button><button onclick="check(6,'D')">D</button></div><div class="result" id="r6"></div><div class="stat" id="s6">載入中...</div></div>
+<div class="question-item show" data-page="1" data-qid="7"><div class="q-label">Q7</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC007.png"><div class="ans-btns"><button onclick="check(7,'A')">A</button><button onclick="check(7,'B')">B</button><button onclick="check(7,'C')">C</button><button onclick="check(7,'D')">D</button></div><div class="result" id="r7"></div><div class="stat" id="s7">載入中...</div></div>
+<div class="question-item show" data-page="1" data-qid="8"><div class="q-label">Q8</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC008.png"><div class="ans-btns"><button onclick="check(8,'A')">A</button><button onclick="check(8,'B')">B</button><button onclick="check(8,'C')">C</button><button onclick="check(8,'D')">D</button></div><div class="result" id="r8"></div><div class="stat" id="s8">載入中...</div></div>
+<div class="question-item show" data-page="1" data-qid="9"><div class="q-label">Q9</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC009.png"><div class="ans-btns"><button onclick="check(9,'A')">A</button><button onclick="check(9,'B')">B</button><button onclick="check(9,'C')">C</button><button onclick="check(9,'D')">D</button></div><div class="result" id="r9"></div><div class="stat" id="s9">載入中...</div></div>
+<div class="question-item show" data-page="1" data-qid="10"><div class="q-label">Q10</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC010.png"><div class="ans-btns"><button onclick="check(10,'A')">A</button><button onclick="check(10,'B')">B</button><button onclick="check(10,'C')">C</button><button onclick="check(10,'D')">D</button></div><div class="result" id="r10"></div><div class="stat" id="s10">載入中...</div></div>
 
-<div class="question-item show" data-page="1" data-qid="2">
-<div class="q-label">Q2</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC002.png">
-<div class="ans-btns"><button onclick="check(2,'A')">A</button><button onclick="check(2,'B')">B</button><button onclick="check(2,'C')">C</button><button onclick="check(2,'D')">D</button></div>
-<div class="result" id="r2"></div>
-<div class="stat" id="s2">載入統計...</div>
-</div>
-
-<div class="question-item show" data-page="1" data-qid="3">
-<div class="q-label">Q3</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC003.png">
-<div class="ans-btns"><button onclick="check(3,'A')">A</button><button onclick="check(3,'B')">B</button><button onclick="check(3,'C')">C</button><button onclick="check(3,'D')">D</button></div>
-<div class="result" id="r3"></div>
-<div class="stat" id="s3">載入統計...</div>
-</div>
-
-<div class="question-item show" data-page="1" data-qid="4">
-<div class="q-label">Q4</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC004.png">
-<div class="ans-btns"><button onclick="check(4,'A')">A</button><button onclick="check(4,'B')">B</button><button onclick="check(4,'C')">C</button><button onclick="check(4,'D')">D</button></div>
-<div class="result" id="r4"></div>
-<div class="stat" id="s4">載入統計...</div>
-</div>
-
-<div class="question-item show" data-page="1" data-qid="5">
-<div class="q-label">Q5</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC005.png">
-<div class="ans-btns"><button onclick="check(5,'A')">A</button><button onclick="check(5,'B')">B</button><button onclick="check(5,'C')">C</button><button onclick="check(5,'D')">D</button></div>
-<div class="result" id="r5"></div>
-<div class="stat" id="s5">載入統計...</div>
-</div>
-
-<div class="question-item show" data-page="1" data-qid="6">
-<div class="q-label">Q6</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC006.png">
-<div class="ans-btns"><button onclick="check(6,'A')">A</button><button onclick="check(6,'B')">B</button><button onclick="check(6,'C')">C</button><button onclick="check(6,'D')">D</button></div>
-<div class="result" id="r6"></div>
-<div class="stat" id="s6">載入統計...</div>
-</div>
-
-<div class="question-item show" data-page="1" data-qid="7">
-<div class="q-label">Q7</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC007.png">
-<div class="ans-btns"><button onclick="check(7,'A')">A</button><button onclick="check(7,'B')">B</button><button onclick="check(7,'C')">C</button><button onclick="check(7,'D')">D</button></div>
-<div class="result" id="r7"></div>
-<div class="stat" id="s7">載入統計...</div>
-</div>
-
-<div class="question-item show" data-page="1" data-qid="8">
-<div class="q-label">Q8</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC008.png">
-<div class="ans-btns"><button onclick="check(8,'A')">A</button><button onclick="check(8,'B')">B</button><button onclick="check(8,'C')">C</button><button onclick="check(8,'D')">D</button></div>
-<div class="result" id="r8"></div>
-<div class="stat" id="s8">載入統計...</div>
-</div>
-
-<div class="question-item show" data-page="1" data-qid="9">
-<div class="q-label">Q9</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC009.png">
-<div class="ans-btns"><button onclick="check(9,'A')">A</button><button onclick="check(9,'B')">B</button><button onclick="check(9,'C')">C</button><button onclick="check(9,'D')">D</button></div>
-<div class="result" id="r9"></div>
-<div class="stat" id="s9">載入統計...</div>
-</div>
-
-<div class="question-item show" data-page="1" data-qid="10">
-<div class="q-label">Q10</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC010.png">
-<div class="ans-btns"><button onclick="check(10,'A')">A</button><button onclick="check(10,'B')">B</button><button onclick="check(10,'C')">C</button><button onclick="check(10,'D')">D</button></div>
-<div class="result" id="r10"></div>
-<div class="stat" id="s10">載入統計...</div>
-</div>
-
-<!-- 第1頁提交按鈕 -->
-<div class="sync-bar" id="sync1" data-page="1">
-<button class="sync-btn" onclick="submitPage(1)">✅ 提交本頁(1–10)記錄到GitHub</button>
+<div class="sync-bar" data-page="1">
+<button class="sync-btn" onclick="submitPage(1)">✅ 提交本頁答題記錄</button>
 </div>
 
 <!-- 11–20 題 -->
-<div class="question-item" data-page="2" data-qid="11">
-<div class="q-label">Q11</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC011.png">
-<div class="ans-btns"><button onclick="check(11,'A')">A</button><button onclick="check(11,'B')">B</button><button onclick="check(11,'C')">C</button><button onclick="check(11,'D')">D</button></div>
-<div class="result" id="r11"></div>
-<div class="stat" id="s11">載入統計...</div>
+<div class="question-item" data-page="2" data-qid="11"><div class="q-label">Q11</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC011.png"><div class="ans-btns"><button onclick="check(11,'A')">A</button><button onclick="check(11,'B')">B</button><button onclick="check(11,'C')">C</button><button onclick="check(11,'D')">D</button></div><div class="result" id="r11"></div><div class="stat" id="s11">載入中...</div></div>
+<div class="question-item" data-page="2" data-qid="12"><div class="q-label">Q12</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC012.png"><div class="ans-btns"><button onclick="check(12,'A')">A</button><button onclick="check(12,'B')">B</button><button onclick="check(12,'C')">C</button><button onclick="check(12,'D')">D</button></div><div class="result" id="r12"></div><div class="stat" id="s12">載入中...</div></div>
+<div class="question-item" data-page="2" data-qid="13"><div class="q-label">Q13</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC013.png"><div class="ans-btns"><button onclick="check(13,'A')">A</button><button onclick="check(13,'B')">B</button><button onclick="check(13,'C')">C</button><button onclick="check(13,'D')">D</button></div><div class="result" id="r13"></div><div class="stat" id="s13">載入中...</div></div>
+<div class="question-item" data-page="2" data-qid="14"><div class="q-label">Q14</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC014.png"><div class="ans-btns"><button onclick="check(14,'A')">A</button><button onclick="check(14,'B')">B</button><button onclick="check(14,'C')">C</button><button onclick="check(14,'D')">D</button></div><div class="result" id="r14"></div><div class="stat" id="s14">載入中...</div></div>
+<div class="question-item" data-page="2" data-qid="15"><div class="q-label">Q15</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC015.png"><div class="ans-btns"><button onclick="check(15,'A')">A</button><button onclick="check(15,'B')">B</button><button onclick="check(15,'C')">C</button><button onclick="check(15,'D')">D</button></div><div class="result" id="r15"></div><div class="stat" id="s15">載入中...</div></div>
+<div class="question-item" data-page="2" data-qid="16"><div class="q-label">Q16</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC016.png"><div class="ans-btns"><button onclick="check(16,'A')">A</button><button onclick="check(16,'B')">B</button><button onclick="check(16,'C')">C</button><button onclick="check(16,'D')">D</button></div><div class="result" id="r16"></div><div class="stat" id="s16">載入中...</div></div>
+<div class="question-item" data-page="2" data-qid="17"><div class="q-label">Q17</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC017.png"><div class="ans-btns"><button onclick="check(17,'A')">A</button><button onclick="check(17,'B')">B</button><button onclick="check(17,'C')">C</button><button onclick="check(17,'D')">D</button></div><div class="result" id="r17"></div><div class="stat" id="s17">載入中...</div></div>
+<div class="question-item" data-page="2" data-qid="18"><div class="q-label">Q18</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC018.png"><div class="ans-btns"><button onclick="check(18,'A')">A</button><button onclick="check(18,'B')">B</button><button onclick="check(18,'C')">C</button><button onclick="check(18,'D')">D</button></div><div class="result" id="r18"></div><div class="stat" id="s18">載入中...</div></div>
+<div class="question-item" data-page="2" data-qid="19"><div class="q-label">Q19</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC019.png"><div class="ans-btns"><button onclick="check(19,'A')">A</button><button onclick="check(19,'B')">B</button><button onclick="check(19,'C')">C</button><button onclick="check(19,'D')">D</button></div><div class="result" id="r19"></div><div class="stat" id="s19">載入中...</div></div>
+<div class="question-item" data-page="2" data-qid="20"><div class="q-label">Q20</div><img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC020.png"><div class="ans-btns"><button onclick="check(20,'A')">A</button><button onclick="check(20,'B')">B</button><button onclick="check(20,'C')">C</button><button onclick="check(20,'D')">D</button></div><div class="result" id="r20"></div><div class="stat" id="s20">載入中...</div></div>
+
+<div class="sync-bar" data-page="2">
+<button class="sync-btn" onclick="submitPage(2)">✅ 提交本頁答題記錄</button>
 </div>
 
-<div class="question-item" data-page="2" data-qid="12">
-<div class="q-label">Q12</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC012.png">
-<div class="ans-btns"><button onclick="check(12,'A')">A</button><button onclick="check(12,'B')">B</button><button onclick="check(12,'C')">C</button><button onclick="check(12,'D')">D</button></div>
-<div class="result" id="r12"></div>
-<div class="stat" id="s12">載入統計...</div>
-</div>
-
-<div class="question-item" data-page="2" data-qid="13">
-<div class="q-label">Q13</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC013.png">
-<div class="ans-btns"><button onclick="check(13,'A')">A</button><button onclick="check(13,'B')">B</button><button onclick="check(13,'C')">C</button><button onclick="check(13,'D')">D</button></div>
-<div class="result" id="r13"></div>
-<div class="stat" id="s13">載入統計...</div>
-</div>
-
-<div class="question-item" data-page="2" data-qid="14">
-<div class="q-label">Q14</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC014.png">
-<div class="ans-btns"><button onclick="check(14,'A')">A</button><button onclick="check(14,'B')">B</button><button onclick="check(14,'C')">C</button><button onclick="check(14,'D')">D</button></div>
-<div class="result" id="r14"></div>
-<div class="stat" id="s14">載入統計...</div>
-</div>
-
-<div class="question-item" data-page="2" data-qid="15">
-<div class="q-label">Q15</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC015.png">
-<div class="ans-btns"><button onclick="check(15,'A')">A</button><button onclick="check(15,'B')">B</button><button onclick="check(15,'C')">C</button><button onclick="check(15,'D')">D</button></div>
-<div class="result" id="r15"></div>
-<div class="stat" id="s15">載入統計...</div>
-</div>
-
-<div class="question-item" data-page="2" data-qid="16">
-<div class="q-label">Q16</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC016.png">
-<div class="ans-btns"><button onclick="check(16,'A')">A</button><button onclick="check(16,'B')">B</button><button onclick="check(16,'C')">C</button><button onclick="check(16,'D')">D</button></div>
-<div class="result" id="r16"></div>
-<div class="stat" id="s16">載入統計...</div>
-</div>
-
-<div class="question-item" data-page="2" data-qid="17">
-<div class="q-label">Q17</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC017.png">
-<div class="ans-btns"><button onclick="check(17,'A')">A</button><button onclick="check(17,'B')">B</button><button onclick="check(17,'C')">C</button><button onclick="check(17,'D')">D</button></div>
-<div class="result" id="r17"></div>
-<div class="stat" id="s17">載入統計...</div>
-</div>
-
-<div class="question-item" data-page="2" data-qid="18">
-<div class="q-label">Q18</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC018.png">
-<div class="ans-btns"><button onclick="check(18,'A')">A</button><button onclick="check(18,'B')">B</button><button onclick="check(18,'C')">C</button><button onclick="check(18,'D')">D</button></div>
-<div class="result" id="r18"></div>
-<div class="stat" id="s18">載入統計...</div>
-</div>
-
-<div class="question-item" data-page="2" data-qid="19">
-<div class="q-label">Q19</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC019.png">
-<div class="ans-btns"><button onclick="check(19,'A')">A</button><button onclick="check(19,'B')">B</button><button onclick="check(19,'C')">C</button><button onclick="check(19,'D')">D</button></div>
-<div class="result" id="r19"></div>
-<div class="stat" id="s19">載入統計...</div>
-</div>
-
-<div class="question-item" data-page="2" data-qid="20">
-<div class="q-label">Q20</div>
-<img src="https://cdn.jsdelivr.net/gh/cychanclassroom/dsePhyBook@main/MC/book1/ch01/DSE_Phy_Bk1_Ch01_MC020.png">
-<div class="ans-btns"><button onclick="check(20,'A')">A</button><button onclick="check(20,'B')">B</button><button onclick="check(20,'C')">C</button><button onclick="check(20,'D')">D</button></div>
-<div class="result" id="r20"></div>
-<div class="stat" id="s20">載入統計...</div>
-</div>
-
-<!-- 第2頁提交按鈕 -->
-<div class="sync-bar" id="sync2" data-page="2">
-<button class="sync-btn" onclick="submitPage(2)">✅ 提交本頁(11–20)記錄到GitHub</button>
-</div>
-
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const USER = "cychanclassroom";
-const REPO = "web";
-const TOKEN = "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";
-const FILE_PATH = "phy/record.json";
+// ===================== 你只需要填這裡 =====================
+const SUPABASE_URL = "https://vonnkewineorstjpmunt.supabase.co";
+const SUPABASE_KEY = "sb_publishable_QHFJjW60y4g5-s-FhLElTw_VXJMTD7a";
+// ==========================================================
+
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const ansData = {
 1:"B",2:"C",3:"A",4:"D",5:"D",6:"B",7:"B",8:"B",9:"D",10:"C",
 11:"C",12:"A",13:"B",14:"D",15:"D",16:"A",17:"B",18:"A",19:"B",20:"D"
 };
 
-let cloudData = { right: [], wrong: [] };
-let currentRight = [];
-let currentWrong = [];
+let tempAnswers = [];
 
-// 開頁讀取
-window.onload = async () => {
-  const raw = `https://raw.githubusercontent.com/${USER}/${REPO}/main/${FILE_PATH}?_=${Date.now()}`;
-  try {
-    const res = await fetch(raw);
-    cloudData = await res.json();
-  } catch (e) {
-    cloudData = { right: [], wrong: [] };
-  }
-  renderStats();
+window.onload = async function () {
+  loadStats();
   resetAll();
-  showPage(1); // 預設顯示第1頁
+  showPage(1);
 };
 
-// 重置所有題目
-function resetAll() {
-  document.querySelectorAll(".ans-btns button").forEach(b => b.disabled = false);
-  document.querySelectorAll(".result").forEach(r => r.style.display = "none");
-  currentRight = [];
-  currentWrong = [];
-}
-
 // 答題
-function check(qid, sel) {
-  const btnGroup = document.querySelector(`[data-qid="${qid}"] .ans-btns`);
-  const btns = btnGroup.querySelectorAll("button");
-  btns.forEach(b => b.disabled = true);
-
+async function check(qid, sel) {
+  const correct = sel === ansData[qid];
   const res = document.getElementById(`r${qid}`);
   res.style.display = "block";
 
-  if (sel === ansData[qid]) {
+  if (correct) {
     res.className = "result correct";
-    res.innerText = `✅ 正確，答案：${ansData[qid]}`;
-    if (!currentRight.includes(qid)) currentRight.push(qid);
+    res.innerText = "✅ 正確\n答案：" + ansData[qid];
   } else {
     res.className = "result wrong";
-    res.innerText = `❌ 錯誤，正確：${ansData[qid]}`;
-    if (!currentWrong.includes(qid)) currentWrong.push(qid);
+    res.innerText = "❌ 錯誤\n正確：" + ansData[qid];
   }
+
+  document.querySelectorAll(`[data-qid="${qid}"] button`).forEach(b=>b.disabled=true);
+  tempAnswers.push({ qid, correct });
 }
 
-// 渲染統計
-function renderStats() {
-  for (let q = 1; q <= 20; q++) {
-    const r = cloudData.right.filter(x => x === q).length;
-    const w = cloudData.wrong.filter(x => x === q).length;
-    document.getElementById(`s${q}`).innerText = `📊 歷史：答對${r}次｜答錯${w}次`;
-  }
-}
-
-// 提交
+// 提交本頁
 async function submitPage(page) {
   if (!confirm("確定提交？")) return;
 
-  const allRight = [...new Set([...cloudData.right, ...currentRight])];
-  const allWrong = [...new Set([...cloudData.wrong, ...currentWrong])];
-  const body = { right: allRight, wrong: allWrong };
-  const content = btoa(JSON.stringify(body));
+  for (let item of tempAnswers) {
+    await supabase.from("records").insert([
+      { qid: item.qid, correct: item.correct }
+    ]);
+  }
 
-  try {
-    const shaRes = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`, {
-      headers: { Authorization: `token ${TOKEN}` }
-    });
-    const sha = (await shaRes.json()).sha;
+  alert("✅ 提交成功！數據已即時更新");
+  tempAnswers = [];
+  resetAll();
+  loadStats();
+}
 
-    await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${FILE_PATH}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `token ${TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: "更新成績",
-        content: content,
-        sha: sha
-      })
-    });
+// 載入統計（每題答對 / 答錯 次數）
+async function loadStats() {
+  const { data: all } = await supabase.from("records").select("*");
 
-    alert("✅ 提交成功！");
-    location.reload();
-  } catch (e) {
-    alert("❌ 提交失敗");
+  for (let q = 1; q <= 20; q++) {
+    const ok = all.filter(x => x.qid === q && x.correct).length;
+    const no = all.filter(x => x.qid === q && !x.correct).length;
+    document.getElementById(`s${q}`).innerText = `📊 答對 ${ok} 次｜答錯 ${no} 次`;
   }
 }
 
-// 切頁 + 只顯示當頁提交按鈕
+// 重置所有題目（每次打開可重做）
+function resetAll() {
+  document.querySelectorAll(".ans-btns button").forEach(b => b.disabled = false);
+  document.querySelectorAll(".result").forEach(r => r.style.display = "none");
+  tempAnswers = [];
+}
+
+// 切頁
 function showPage(p) {
-  // 切換分頁按鈕
   document.querySelectorAll(".page-btn").forEach((btn, i) => {
     btn.classList.toggle("active", i + 1 === p);
   });
-
-  // 顯示對應題目
   document.querySelectorAll(".question-item").forEach(item => {
     item.classList.toggle("show", +item.dataset.page === p);
   });
-
-  // 只顯示當頁提交按鈕
   document.querySelectorAll(".sync-bar").forEach(bar => {
     bar.classList.toggle("show", +bar.dataset.page === p);
   });
-
   resetAll();
 }
 </script>
 </body>
 </html>
-
