@@ -63,7 +63,7 @@ body{background:#f5f7fa;padding:20px}
 </div>
 
 <script>
-// 填入你 Supabase 設定
+// --- 只定義一次 Supabase ---
 const supabaseUrl = "https://vonnkewineorstjpmunt.supabase.co";
 const supabaseKey = "sb_publishable_QHFJjW60y4g5-s-FhLElTw_VXJMTD7a";
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -224,7 +224,7 @@ C：${c} 次
 D：${d} 次`;
 }
 
-// 全班統計（A+B+C+D = 總人數，穩定版）
+// 全班統計（穩定版）
 async function showClassStat(qnum){
   const {data} = await supabase.from("answers")
     .select("sid,student_ans")
