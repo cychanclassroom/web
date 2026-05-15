@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>物理 Book1 Chapter1 MC</title>
+<title>Physics Book1 Chapter1 MC</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0}
@@ -63,190 +63,183 @@ body{background:#f5f7fa;padding:20px}
 </div>
 
 <script>
-// --- 只定義一次 Supabase ---
-const supabaseUrl = "https://vonnkewineorstjpmunt.supabase.co";
-const supabaseKey = "sb_publishable_QHFJjW60y4g5-s-FhLElTw_VXJMTD7a";
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+// 只定義一次 Supabase 客戶端，避免衝突
+(function() {
+  const supabaseUrl = "https://vonnkewineorstjpmunt.supabase.co";
+  const supabaseKey = "sb_publishable_QHFJjW60y4g5-s-FhLElTw_VXJMTD7a";
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-let currentSid = "";
-let currentName = "";
-let allQuestions = [];
-let studentAnswers = {};
+  let currentSid = "";
+  let currentName = "";
+  let allQuestions = [];
+  let studentAnswers = {};
 
-// 登入
-async function login(){
-  const sid = document.getElementById("sid").value.trim();
-  const pw = document.getElementById("pw").value.trim();
-  if(!sid){alert("請輸入學號");return}
-  const {data,error} = await supabase.from("students").select("id,name,pw").eq("id",sid).single();
-  if(error || !data || data.pw!==pw){alert("學號或密碼錯誤");return}
-  currentSid = data.id;
-  currentName = data.name;
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("main").style.display = "block";
-  document.getElementById("userInfo").innerText = `學生：${currentName} (${currentSid})`;
-  loadQuestions();
-}
-
-// 從資料庫讀題
-async function loadQuestions(){
-  const {data,error} = await supabase.from("questions")
-    .select("*")
-    .eq("subject","phy")
-    .eq("book_no",1)
-    .eq("chapter_no",1)
-    .eq("q_type","mc")
-    .order("q_num",{ascending:true});
-
-  if(error){console.error(error);return}
-  allQuestions = data;
-  renderQuestions();
-  loadStudentHistory();
-}
-
-// 渲染題目
-function renderQuestions(){
-  const container = document.getElementById("questionsContainer");
-  container.innerHTML = "";
-  allQuestions.forEach(q=>{
-    const div = document.createElement("div");
-    div.className = "question";
-    div.dataset.page = q.q_num<=10 ? 1 : 2;
-    div.innerHTML = `
-      <div class="q-title">Q${q.q_num}</div>
-      <img src="${q.q_img}" alt="題目">
-      <div class="ans-row">
-        <button onclick="choose(${q.q_num},'A')">A</button>
-        <button onclick="choose(${q.q_num},'B')">B</button>
-        <button onclick="choose(${q.q_num},'C')">C</button>
-        <button onclick="choose(${q.q_num},'D')">D</button>
-      </div>
-      <div class="result" id="res${q.q_num}"></div>
-      <div class="history-box" id="hist${q.q_num}"></div>
-      <div class="stat-row" id="statRow${q.q_num}">
-        <button class="btn-me" onclick="showMyStat(${q.q_num})">📝 我的答案統計</button>
-        <button class="btn-class" onclick="showClassStat(${q.q_num})">📊 全部學生的統計</button>
-      </div>
-      <div class="stat-panel" id="statPanel${q.q_num}"></div>
-    `;
-    container.appendChild(div);
-  });
-  showPage(1);
-}
-
-// 切換頁
-function showPage(p){
-  document.querySelectorAll(".page-nav button").forEach(b=>b.classList.remove("active"));
-  event.target.classList.add("active");
-  document.querySelectorAll(".question").forEach(q=>{
-    q.classList.toggle("show", Number(q.dataset.page)===p);
-  });
-}
-
-// 選擇答案
-function choose(qnum,ans){
-  studentAnswers[qnum] = ans;
-  const q = allQuestions.find(x=>x.q_num===qnum);
-  const resEl = document.getElementById("res"+qnum);
-  resEl.style.display = "block";
-  if(ans===q.correct_ans){
-    resEl.className = "result correct";
-    resEl.innerText = `✅ 正確\n${q.explanation}`;
-  }else{
-    resEl.className = "result wrong";
-    resEl.innerText = `❌ 錯誤，正確答案：${q.correct_ans}\n${q.explanation}`;
+  // 將所有函數封裝在 IIFE 內部，確保不會有全局變數衝突
+  window.login = async function(){
+    const sid = document.getElementById("sid").value.trim();
+    const pw = document.getElementById("pw").value.trim();
+    if(!sid){alert("請輸入學號");return}
+    const {data,error} = await supabase.from("students").select("id,name,pw").eq("id",sid).single();
+    if(error || !data || data.pw!==pw){alert("學號或密碼錯誤");return}
+    currentSid = data.id;
+    currentName = data.name;
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("main").style.display = "block";
+    document.getElementById("userInfo").innerText = `學生：${currentName} (${currentSid})`;
+    loadQuestions();
   }
-  // 鎖定按鈕
-  document.querySelector(`.question:nth-child(${qnum}) .ans-row`).querySelectorAll("button").forEach(b=>b.disabled=true);
-  document.getElementById("finalSubmit").disabled = false;
-}
 
-// 提交所有答案
-async function submitAll(){
-  const arr = [];
-  for(const qnum in studentAnswers){
-    const q = allQuestions.find(x=>x.q_num===Number(qnum));
-    arr.push({
-      sid:currentSid,
-      subject:"phy",
-      book_no:1,
-      chapter_no:1,
-      q_num:Number(qnum),
-      student_ans:studentAnswers[qnum],
-      correct_ans:q.correct_ans,
-      is_correct: studentAnswers[qnum]===q.correct_ans
+  async function loadQuestions(){
+    const {data,error} = await supabase.from("questions")
+      .select("*")
+      .eq("subject","phy")
+      .eq("book_no",1)
+      .eq("chapter_no",1)
+      .eq("q_type","mc")
+      .order("q_num",{ascending:true});
+
+    if(error){console.error(error);return}
+    allQuestions = data;
+    renderQuestions();
+    loadStudentHistory();
+  }
+
+  function renderQuestions(){
+    const container = document.getElementById("questionsContainer");
+    container.innerHTML = "";
+    allQuestions.forEach(q=>{
+      const div = document.createElement("div");
+      div.className = "question";
+      div.dataset.page = q.q_num<=10 ? 1 : 2;
+      div.innerHTML = `
+        <div class="q-title">Q${q.q_num}</div>
+        <img src="${q.q_img}" alt="題目">
+        <div class="ans-row">
+          <button onclick="choose(${q.q_num},'A')">A</button>
+          <button onclick="choose(${q.q_num},'B')">B</button>
+          <button onclick="choose(${q.q_num},'C')">C</button>
+          <button onclick="choose(${q.q_num},'D')">D</button>
+        </div>
+        <div class="result" id="res${q.q_num}"></div>
+        <div class="history-box" id="hist${q.q_num}"></div>
+        <div class="stat-row" id="statRow${q.q_num}">
+          <button class="btn-me" onclick="showMyStat(${q.q_num})">📝 我的答案統計</button>
+          <button class="btn-class" onclick="showClassStat(${q.q_num})">📊 全部學生的統計</button>
+        </div>
+        <div class="stat-panel" id="statPanel${q.q_num}"></div>
+      `;
+      container.appendChild(div);
+    });
+    showPage(1);
+  }
+
+  window.showPage = function(p){
+    document.querySelectorAll(".page-nav button").forEach(b=>b.classList.remove("active"));
+    event.target.classList.add("active");
+    document.querySelectorAll(".question").forEach(q=>{
+      q.classList.toggle("show", Number(q.dataset.page)===p);
     });
   }
-  await supabase.from("answers").insert(arr);
-  alert("✅ 提交成功！");
-  loadStudentHistory();
-}
 
-// 載入個人歷史
-async function loadStudentHistory(){
-  const {data} = await supabase.from("answers")
-    .select("q_num,student_ans,is_correct")
-    .eq("sid",currentSid)
-    .eq("subject","phy")
-    .eq("book_no",1)
-    .eq("chapter_no",1);
-
-  allQuestions.forEach(q=>{
-    const h = data.find(x=>x.q_num===q.q_num);
-    if(h){
-      document.getElementById("hist"+q.q_num).innerText = 
-        `✅ 曾作答：${h.student_ans} ${h.is_correct?"(正確)":"(錯誤)"}`;
-      document.getElementById("statRow"+q.q_num).classList.add("show");
+  window.choose = function(qnum,ans){
+    studentAnswers[qnum] = ans;
+    const q = allQuestions.find(x=>x.q_num===qnum);
+    const resEl = document.getElementById("res"+qnum);
+    resEl.style.display = "block";
+    if(ans===q.correct_ans){
+      resEl.className = "result correct";
+      resEl.innerText = `✅ 正確\n${q.explanation}`;
+    }else{
+      resEl.className = "result wrong";
+      resEl.innerText = `❌ 錯誤，正確答案：${q.correct_ans}\n${q.explanation}`;
     }
-  });
-}
+    document.querySelector(`.question:nth-child(${qnum}) .ans-row`).querySelectorAll("button").forEach(b=>b.disabled=true);
+    document.getElementById("finalSubmit").disabled = false;
+  }
 
-// 個人統計
-async function showMyStat(qnum){
-  const {data} = await supabase.from("answers")
-    .select("student_ans")
-    .eq("sid",currentSid)
-    .eq("q_num",qnum);
-  const total = data.length;
-  let a=0,b=0,c=0,d=0;
-  data.forEach(x=>{
-    if(x.student_ans==="A")a++;
-    if(x.student_ans==="B")b++;
-    if(x.student_ans==="C")c++;
-    if(x.student_ans==="D")d++;
-  });
-  const panel = document.getElementById("statPanel"+qnum);
-  panel.style.display = "block";
-  panel.innerText = `📝 Q${qnum} 我的答案統計(${total}次)
+  window.submitAll = async function(){
+    const arr = [];
+    for(const qnum in studentAnswers){
+      const q = allQuestions.find(x=>x.q_num===Number(qnum));
+      arr.push({
+        sid:currentSid,
+        subject:"phy",
+        book_no:1,
+        chapter_no:1,
+        q_num:Number(qnum),
+        student_ans:studentAnswers[qnum],
+        correct_ans:q.correct_ans,
+        is_correct: studentAnswers[qnum]===q.correct_ans
+      });
+    }
+    await supabase.from("answers").insert(arr);
+    alert("✅ 提交成功！");
+    loadStudentHistory();
+  }
+
+  async function loadStudentHistory(){
+    const {data} = await supabase.from("answers")
+      .select("q_num,student_ans,is_correct")
+      .eq("sid",currentSid)
+      .eq("subject","phy")
+      .eq("book_no",1)
+      .eq("chapter_no",1);
+
+    allQuestions.forEach(q=>{
+      const h = data.find(x=>x.q_num===q.q_num);
+      if(h){
+        document.getElementById("hist"+q.q_num).innerText = 
+          `✅ 曾作答：${h.student_ans} ${h.is_correct?"(正確)":"(錯誤)"}`;
+        document.getElementById("statRow"+q.q_num).classList.add("show");
+      }
+    });
+  }
+
+  window.showMyStat = async function(qnum){
+    const {data} = await supabase.from("answers")
+      .select("student_ans")
+      .eq("sid",currentSid)
+      .eq("q_num",qnum);
+    const total = data.length;
+    let a=0,b=0,c=0,d=0;
+    data.forEach(x=>{
+      if(x.student_ans==="A")a++;
+      if(x.student_ans==="B")b++;
+      if(x.student_ans==="C")c++;
+      if(x.student_ans==="D")d++;
+    });
+    const panel = document.getElementById("statPanel"+qnum);
+    panel.style.display = "block";
+    panel.innerText = `📝 Q${qnum} 我的答案統計(${total}次)
 A：${a} 次
 B：${b} 次
 C：${c} 次
 D：${d} 次`;
-}
+  }
 
-// 全班統計（穩定版）
-async function showClassStat(qnum){
-  const {data} = await supabase.from("answers")
-    .select("sid,student_ans")
-    .eq("q_num",qnum);
-  const map = new Map();
-  data.forEach(x=>map.set(x.sid,x.student_ans));
-  let a=0,b=0,c=0,d=0;
-  map.forEach(ans=>{
-    if(ans==="A")a++;
-    if(ans==="B")b++;
-    if(ans==="C")c++;
-    if(ans==="D")d++;
-  });
-  const total = a+b+c+d;
-  const panel = document.getElementById("statPanel"+qnum);
-  panel.style.display = "block";
-  panel.innerText = `📊 Q${qnum} 全部學生的統計(${total}人)
+  window.showClassStat = async function(qnum){
+    const {data} = await supabase.from("answers")
+      .select("sid,student_ans")
+      .eq("q_num",qnum);
+    const map = new Map();
+    data.forEach(x=>map.set(x.sid,x.student_ans));
+    let a=0,b=0,c=0,d=0;
+    map.forEach(ans=>{
+      if(ans==="A")a++;
+      if(ans==="B")b++;
+      if(ans==="C")c++;
+      if(ans==="D")d++;
+    });
+    const total = a+b+c+d;
+    const panel = document.getElementById("statPanel"+qnum);
+    panel.style.display = "block";
+    panel.innerText = `📊 Q${qnum} 全部學生的統計(${total}人)
 A：${a} 人
 B：${b} 人
 C：${c} 人
 D：${d} 人`;
-}
+  }
+})();
 </script>
 </body>
 </html>
