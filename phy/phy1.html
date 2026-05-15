@@ -54,8 +54,8 @@ body{background:#f5f7fa;padding:20px}
   <div class="title">Book 1 Chapter 1 溫度與溫度計 MC 練習</div>
 
   <div class="page-nav">
-    <button class="active" onclick="showPage(1)">1–10</button>
-    <button onclick="showPage(2)">11–20</button>
+    <button class="active" onclick="showPage(1, this)">1–10</button>
+    <button onclick="showPage(2, this)">11–20</button>
   </div>
 
   <div id="questionsContainer"></div>
@@ -63,7 +63,6 @@ body{background:#f5f7fa;padding:20px}
 </div>
 
 <script>
-// 只定義一次 Supabase 客戶端，避免衝突
 (function() {
   const supabaseUrl = "https://vonnkewineorstjpmunt.supabase.co";
   const supabaseKey = "sb_publishable_QHFJjW60y4g5-s-FhLElTw_VXJMTD7a";
@@ -74,7 +73,6 @@ body{background:#f5f7fa;padding:20px}
   let allQuestions = [];
   let studentAnswers = {};
 
-  // 將所有函數封裝在 IIFE 內部，確保不會有全局變數衝突
   window.login = async function(){
     const sid = document.getElementById("sid").value.trim();
     const pw = document.getElementById("pw").value.trim();
@@ -130,12 +128,13 @@ body{background:#f5f7fa;padding:20px}
       `;
       container.appendChild(div);
     });
-    showPage(1);
+    showPage(1, document.querySelector(".page-nav button.active"));
   }
 
-  window.showPage = function(p){
+  // 修復：將按鈕元素直接傳入函數，唔再依賴 event.target
+  window.showPage = function(p, btn){
     document.querySelectorAll(".page-nav button").forEach(b=>b.classList.remove("active"));
-    event.target.classList.add("active");
+    btn.classList.add("active");
     document.querySelectorAll(".question").forEach(q=>{
       q.classList.toggle("show", Number(q.dataset.page)===p);
     });
