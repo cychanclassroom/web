@@ -495,31 +495,42 @@ D：${d} 次`;
 
 // 按鈕2：全部學生的統計(總人數)
 async function showClassLast(qid) {
-  // 1. 先取所有紀錄，按時間由新到舊排序
+  // 1. 讀取所有紀錄，由新到舊排序
   const { data } = await sb.from("records")
     .select("sid, answer, created_at")
     .eq("subject", SUBJECT)
     .eq("unit", UNIT)
     .eq("qid", qid)
-    .order("created_at", { ascending: false }); // 新紀錄排最前
+    .order("created_at", { ascending: false });
 
-  // 2. 每個學生只保留第一條（即最後一次作答）
-  const uniqueStudents = new Map();
-  for (const row of data) {
-    if (!uniqueStudents.has(row.sid)) {
-      uniqueStudents.set(row.sid, row.answer);
+  // 2. 逐條加入，每個學生只存第一條（最新）
+  const unique = new Map();
+  for (let i = 0; i < data.length; i++) {
+    const s = data[i].sid;
+    if (!unique.has(s)) {
+      unique.set(s, data[i].answer);
     }
   }
 
-  // 3. 統計A/B/C/D
-  let a = 0, b = 0, c = 0, d = 0;
-  uniqueStudents.forEach(ans => {
-    if (ans === "A") a++;
-    if (ans === "B") b++;
-    if (ans === "C") c++;
-    if (ans === "D") d++;
+  // 3. 統計
+  let a=0,b=0,c=0,d=0;
+  unique.forEach(ans=>{
+    if(ans==='A')a++;
+    if(ans==='B')b++;
+    if(ans==='C')c++;
+    if(ans==='D')d++;
   });
 
+  const total = unique.size; // 這裡一定等於真實學生數
+
+  const box = document.getElementById("stat"+qid);
+  box.style.display = "block";
+  box.innerText = `📊 Q${qid} 全部學生的統計(${total}人)
+A：${a} 人
+B：${b} 人
+C：${c} 人
+D：${d} 人`;
+}
   const total = uniqueStudents.size; // 呢個先係真實總人數
   const box = document.getElementById("stat"+qid);
   box.style.display = "block";
