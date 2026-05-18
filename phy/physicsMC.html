@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSE物理題庫</title>
+  <style>
+    *{box-sizing:border-box;font-family:system-ui,sans-serif}
+    body{max-width:950px;margin:0 auto;padding:20px;background:#f5f7fa}
+    .filter-panel{background:#fff;padding:16px;border-radius:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:24px;box-shadow:0 1px 6px rgba(0,0,0,0.05)}
+    select,input,button{padding:9px;border:1px solid #ccc;border-radius:6px;font-size:14px}
+    button{background:#2563eb;color:white;border:none;cursor:pointer}
+    button:hover{background:#1d4ed8}
+    .question-card{background:white;padding:16px;border-radius:8px;margin:12px 0;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+    .question-card img{width:100%;max-width:750px;margin:10px 0}
+    .meta{font-size:13px;color:#666;margin-bottom:8px}
+    .answer-bar{margin-top:12px;display:flex;gap:10px}
+    .ans-btn{flex:1;padding:12px 0;font-size:16px;font-weight:bold;background:#b8e1ff;color:#000;border:1px solid #99ccff}
+    .ans-btn.correct{background:#28a745;color:#fff}
+    .ans-btn.wrong{background:#dc3545;color:#fff}
+    .result-text{margin-top:10px;font-weight:bold;font-size:17px;color:#dc3545}
+    .explain{margin-top:10px;padding:10px;background:#f0f4ff;border-radius:6px;font-size:16px;display:none}
+    .stat{margin-top:12px;font-size:14px;color:#444;background:#eef6ff;padding:6px 10px;border-radius:6px}
+    .page-bar{margin-top:20px;text-align:center}
+    .page-btn{margin:0 4px;padding:8px 14px}
+    .error-text{color:#dc3545;text-align:center;padding:20px;font-size:16px}
+  </style>
+</head>
+<body>
+<h2>DSE物理題庫｜GitHub 穩定版</h2>
+<div class="filter-panel">
+  <select id="source">
+    <option value="">全部來源</option>
+    <option value="book01">book01</option>
+  </select>
+  <select id="chapter">
+    <option value="">全部章節</option>
+    <option value="ch01">ch01</option>
+    <option value="ch02">ch02</option>
+    <option value="ch03">ch03</option>
+    <option value="ch04">ch04</option>
+  </select>
+  <input type="number" id="q_no" placeholder="題號">
+  <select id="diff">
+    <option value="">全部難度</option>
+    <option value="easy">easy</option>
+    <option value="avg">avg</option>
+    <option value="dif">dif</option>
+  </select>
+
+  <select id="qtype">
+    <option value="">全部題目</option>
+    <option value="correct">答對題</option>
+    <option value="wrong">錯題</option>
+    <option value="unfinished">未完成題</option>
+  </select>
+
+  <button onclick="loadFilteredQuestions()">查詢題目</button>
+</div>
+<div id="questionList">載入中...</div>
+<div class="page-bar" id="pageBar"></div>
+
+<script>
+let ALL_QUESTIONS = [];
+const PER_PAGE = 10;
+let currentPage = 1;
+
+function fixJson(text) {
+  text = text.trim();
+  if (!text.startsWith('[')) text = '[' + text;
+  if (!text.endsWith(']')) text = text + ']';
+  text = text.replace(/,\s*\]/g, ']');
+  return text;
+}
+
+async function loadQuestionsFromGitHub() {
+  const list = document.getElementById("questionList");
+  try {
+    const url = "https://raw.githubusercontent.com/cychanclassroom/web/main/phy/quest.txt";
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP 錯誤: ${res.status}`);
+    const rawText = await res.text();
+    const fixedText = fixJson(rawText);
+    ALL_QUESTIONS = JSON.parse(fixedText);
+    loadFilteredQuestions();
+  } catch (err) {
+    console.error("載入失敗", err);
+    list.innerHTML = `<div class="error-text">❌ 載入題目失敗：${err.message}</div>`;
+  }
+}
+
+function getRecord() {
+  const raw = localStorage.getItem("q_records");
+  return raw ? JSON.parse(raw) : {};
+}
+function saveRecord(obj) {
+  localStorage.setItem("q_records", JSON.stringify(obj));
+}
+
+function checkAnswer(btnEl, userAns, correctAns, card, qid) {
+  const allBtns = card.querySelectorAll(".ans-btn");
+  allBtns.forEach(b => b.disabled = true);
+  const rec = getRecord();
+  rec[qid] = rec[qid] || { correct: 0, wrong: 0 };
+
+  if (userAns === correctAns) {
+    btnEl.classList.add("correct");
+    rec[qid].correct++;
+    card.querySelector(".result-text").innerHTML = "✅ 正確，答案：" + correctAns;
+  } else {
+    btnEl.classList.add("wrong");
+    allBtns.forEach(b => b.dataset.ans === correctAns && b.classList.add("correct"));
+    rec[qid].wrong++;
+    card.querySelector(".result-text").innerHTML = "❌ 錯誤，正確答案：" + correctAns;
+  }
+  saveRecord(rec);
+  card.querySelector(".explain").style.display = "block";
+  const r = rec[qid];
+  card.querySelector(".stat").innerHTML = `📊 答對 ${r.correct} 次｜答錯 ${r.wrong} 次`;
+}
+
+function loadFilteredQuestions(page = 1) {
+  currentPage = page;
+  const list = document.getElementById("questionList");
+  const bar = document.getElementById("pageBar");
+
+  if (ALL_QUESTIONS.length === 0) {
+    list.innerHTML = "載入中...";
+    return;
+  }
+
+  const source = document.getElementById("source").value;
+  const chapter = document.getElementById("chapter").value;
+  const q_no = document.getElementById("q_no").value.trim();
+  const diff = document.getElementById("diff").value;
+  const qtype = document.getElementById("qtype").value;
+
+  const rec = getRecord();
+
+  let filtered = ALL_QUESTIONS.filter(q => {
+    if (source && q.source !== source) return false;
+    if (chapter && q.chapter !== chapter) return false;
+    if (q_no && q.q_no?.toString() !== q_no) return false;
+    if (diff && q.diff !== diff) return false;
+
+    if (qtype === "correct") {
+      if (!rec[q.id] || rec[q.id].correct === 0) return false;
+    }
+    if (qtype === "wrong") {
+      if (!rec[q.id] || rec[q.id].wrong === 0) return false;
+    }
+    if (qtype === "unfinished") {
+      if (rec[q.id]) return false;
+    }
+    return true;
+  });
+
+  // ==============================
+  // ✅ 你要的排序：(錯次 - 對次) 愈大排愈上
+  // ==============================
+  if (qtype === "wrong") {
+    filtered.sort((a, b) => {
+      const scoreA = (rec[a.id]?.wrong || 0) - (rec[a.id]?.correct || 0);
+      const scoreB = (rec[b.id]?.wrong || 0) - (rec[b.id]?.correct || 0);
+      return scoreB - scoreA;
+    });
+  }
+
+  const totalPage = Math.ceil(filtered.length / PER_PAGE);
+  const items = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  list.innerHTML = "";
+  bar.innerHTML = "";
+
+  items.forEach(q => {
+    const r = rec[q.id] || { correct: 0, wrong: 0 };
+    const card = document.createElement("div");
+    card.className = "question-card";
+    card.innerHTML = `
+      <div class="meta">${q.chapter}｜題號 ${q.q_no}｜難度 ${q.diff}</div>
+      <div class="meta">${q.large_topic || ''}</div>
+      <img src="${q.png_link}" alt="題目">
+      <div class="answer-bar">
+        <button class="ans-btn" data-ans="A">A</button>
+        <button class="ans-btn" data-ans="B">B</button>
+        <button class="ans-btn" data-ans="C">C</button>
+        <button class="ans-btn" data-ans="D">D</button>
+      </div>
+      <div class="result-text"></div>
+      <div class="explain">解析：${q.explain}</div>
+      <div class="stat">📊 答對 ${r.correct} 次｜答錯 ${r.wrong} 次</div>
+    `;
+    list.appendChild(card);
+    card.querySelectorAll(".ans-btn").forEach(btn => {
+      btn.onclick = () => checkAnswer(btn, btn.dataset.ans, q.ans, card, q.id);
+    });
+  });
+
+  for (let i = 1; i <= totalPage; i++) {
+    bar.innerHTML += `<button class="page-btn" onclick="loadFilteredQuestions(${i})">${i}</button>`;
+  }
+}
+
+loadQuestionsFromGitHub();
+</script>
+</body>
+</html>
