@@ -1,7 +1,7 @@
 /#BOOK1_MCandEbook.html
 
 https://cychanclassroom.github.io/web/phy/BOOK1_MCandEbook.html
-
+https://cychanclassroom.github.io/pdf/phy/physicsMC.html
 
 /#PhyBook1_MC
 
