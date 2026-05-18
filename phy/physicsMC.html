@@ -76,7 +76,7 @@ function fixJson(text) {
 async function loadQuestionsFromGitHub() {
   const list = document.getElementById("questionList");
   try {
-    const url = "https://raw.githubusercontent.com/cychanclassroom/web/main/phy/quest.txt";
+    const url = "https://raw.githubusercontent.com/cychanclassroom/web/main/phy/physics_MC.txt";
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP 錯誤: ${res.status}`);
     const rawText = await res.text();
